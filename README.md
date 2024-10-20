@@ -1,7 +1,6 @@
 # NeonCloud
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Build Status](https://img.shields.io/travis/com/BlessedNur/neoncloud)](https://travis-ci.com/BlessedNur/neoncloud)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)[![Build Status](https://github.com/BlessedNur/neoncloud/actions/workflows/ci.yml/badge.svg)](https://github.com/BlessedNur/neoncloud/actions)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/BlessedNur/neoncloud/issues)
 
 

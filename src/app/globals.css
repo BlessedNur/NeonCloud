@@ -11,14 +11,17 @@
 }
 body {
   background: linear-gradient(
-    180deg,
-    rgba(16, 24, 53, 1) 0%,
-    rgba(3, 9, 29, 1) 100%
+    134.41deg,
+    rgba(3, 9, 29, 0.95) 13.47%,
+    #132059 56.64%,
+    #03091d 90.93%
   );
+
   color: white;
   height: 1000vh;
 }
-.buttons button, .domainbtn {
+.buttons button,
+.domainbtn {
   background: linear-gradient(
     91.24deg,
     #cf088c 39.72%,
@@ -26,6 +29,6 @@ body {
     #cf088c 80.28%
   );
 }
-.service{
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.service {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }

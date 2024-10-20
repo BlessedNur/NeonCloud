@@ -2,32 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    134.41deg,
+    rgba(3, 9, 29, 0.95) 13.47%,
+    #132059 56.64%,
+    #03091d 90.93%
+  );
+
+  color: white;
+  /* height: 1000vh; */
+}
+.buttons button,
+.domainbtn {
+  background: linear-gradient(
+    91.24deg,
+    #cf088c 39.72%,
+    #cf088c 60.99%,
+    #cf088c 80.28%
+  );
+}
+.service {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(150px, 1fr)
+  ); /* Responsive columns */
+  gap: 1rem;
+  justify-items: center; /* Center items horizontally */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.service > li:nth-last-child(1):nth-child(odd) {
+  grid-column: span 1; /* Make the last single item span two columns */
+  justify-self: center;
+}
+
+.service > li:nth-last-child(2):nth-child(odd) {
+  justify-self: start; /* For rows with two elements, align them properly */
+}
+.footer {
+  background: rgba(3, 9, 29, 1);
 }

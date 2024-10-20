@@ -127,7 +127,7 @@ function Navbar() {
           </div>
 
           {/* Mobile Menu Links */}
-          <div className="flex flex-col justify-between text-gray-200 h-[80vh]">
+          <div className="flex flex-col justify-between text-gray-200">
             <ul className="flex flex-col gap-6 mt-6 text-lg">
               <li className="cursor-pointer hover:text-[rgba(207,8,140,1)] transition-colors duration-300 ease-in-out">
                 <i className="fa fa-home mr-2"></i> Home

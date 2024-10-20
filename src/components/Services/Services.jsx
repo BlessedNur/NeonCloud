@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 const services = [
   { src: "/images/Group 29.png", alt: "Service 1" },

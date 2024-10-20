@@ -3,7 +3,7 @@ import React from "react";
 
 function Banner() {
   return (
-    <div className="relative flex items-center max-md:h-[100svh]  gap-6 mt-4 max-md:mt-0 justify-between max-w-[1270px] m-auto px-4">
+    <div className="relative flex items-center max-md:h-[90svh]  gap-6 mt-4 max-md:mt-0 justify-between max-w-[1270px] m-auto px-4">
       {/* Background Image for Mobile View */}
       <div className="absolute inset-0 -z-10 md:hidden">
         <img

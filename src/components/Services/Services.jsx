@@ -26,7 +26,7 @@ const ServicesSection = () => {
             <li key={index} className="grid place-content-center">
               <Image
                 src={service.src}
-                className="w-[95%] m-auto h-full"
+                className="w-[100%] m-auto h-full"
                 height={200}
                 width={200}
                 alt={service.alt}

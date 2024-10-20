@@ -11,17 +11,14 @@
 }
 body {
   background: linear-gradient(
-    134.41deg,
-    rgba(3, 9, 29, 0.95) 13.47%,
-    #132059 56.64%,
-    #03091d 90.93%
+    180deg,
+    rgba(16, 24, 53, 1) 0%,
+    rgba(3, 9, 29, 1) 100%
   );
-
   color: white;
-  /* height: 1000vh; */
+  height: 1000vh;
 }
-.buttons button,
-.domainbtn {
+.buttons button, .domainbtn {
   background: linear-gradient(
     91.24deg,
     #cf088c 39.72%,
@@ -29,24 +26,6 @@ body {
     #cf088c 80.28%
   );
 }
-.service {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(150px, 1fr)
-  ); /* Responsive columns */
-  gap: 1rem;
-  justify-items: center; /* Center items horizontally */
-}
-
-.service > li:nth-last-child(1):nth-child(odd) {
-  grid-column: span 1; /* Make the last single item span two columns */
-  justify-self: center;
-}
-
-.service > li:nth-last-child(2):nth-child(odd) {
-  justify-self: start; /* For rows with two elements, align them properly */
-}
-.footer {
-  background: rgba(3, 9, 29, 1);
+.service{
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }

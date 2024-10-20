@@ -59,7 +59,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-12">
             <div className="grid gap-8 grid-cols-1 text-gray-300 sm:grid-cols-2 md:grid-cols-3">
-              <div className=" bg-secondary-gradient p-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
+              <div className=" bg-secondary-gradient p-10 pt-16 max-md:pt-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
                 <div className="absolute bg-category-gradient p-5 rounded-full grid place-content-center top-[-30px]">
                   <Image
                     src={"/images/internet-speed-icon 1.png"}
@@ -75,7 +75,7 @@ export default function Home() {
                   swift website page loading speed.{" "}
                 </p>
               </div>
-              <div className=" bg-secondary-gradient p-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
+              <div className=" bg-secondary-gradient p-10 pt-16 max-md:pt-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
                 <div className="absolute bg-category-gradient p-5 rounded-full grid place-content-center top-[-30px]">
                   <Image
                     src={"/images/cloud-computing-icon 1.png"}
@@ -91,7 +91,7 @@ export default function Home() {
                   Defined Network.
                 </p>
               </div>
-              <div className=" bg-secondary-gradient p-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
+              <div className=" bg-secondary-gradient p-10 pt-16 max-md:pt-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
                 <div className="absolute bg-category-gradient p-5 rounded-full grid place-content-center top-[-30px]">
                   <Image
                     src={"/images/secure-icon 1.png"}

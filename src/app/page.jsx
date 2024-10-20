@@ -125,7 +125,7 @@ export default function Home() {
               <h3 className="text-[25px] w-full">Hassle Free Migration</h3>
               <p className="text-gray-300">
                 Our technical expert team will help you to migrate your site
-                from your current hosting provider to Host.co.in, You don't have
+                from your current hosting provider to Host.co.in, You don&apos;t have
                 to worry about any of the migration issues.
               </p>
               <button className="bg-custom-gradient max-md:m-auto p-3 px-10 cursor-pointer rounded-lg w-fit">

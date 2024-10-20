@@ -1,4 +1,10 @@
 # NeonCloud
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://img.shields.io/travis/com/BlessedNur/neoncloud)](https://travis-ci.com/BlessedNur/neoncloud)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/BlessedNur/neoncloud/issues)
+
+
 NeonCloud is a cutting-edge hosting platform designed for developers and businesses seeking fast, reliable, and scalable web solutions. Built with Next.js for a seamless user experience and powered by Node.js for robust backend functionality, NeonCloud enables users to deploy applications effortlessly.
 
 ## Features
@@ -16,7 +22,7 @@ NeonCloud is a cutting-edge hosting platform designed for developers and busines
 ### Installation
 ```
 # Clone the repository
-git clone https://github.com/yourusername/neoncloud.git
+git clone https://github.com/BlessedNur/neoncloud.git
 
 # Navigate to the project folder
 cd neoncloud
@@ -24,6 +30,12 @@ cd neoncloud
 # Install dependencies
 npm install
 
+```
+
+### Running the Development Server
+
+```
+npm run dev
 ```
 
 ### 3. **`CONTRIBUTING.md` Template**

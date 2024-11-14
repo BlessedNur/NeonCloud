@@ -7,16 +7,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-size: 15px;
+  font-size: 14px;
 }
 body {
-  background: linear-gradient(
-    134.41deg,
-    rgba(3, 9, 29, 0.95) 13.47%,
-    #132059 56.64%,
-    #03091d 90.93%
-  );
-
+  /* background: linear-gradient(134.41deg, rgba(1, 4, 15, 0.95) 13.47%, #020613 56.64%, #020b18 90.93%); */
+background: black;
+  /* height:100vh; */
   color: white;
 }
 .buttons button,

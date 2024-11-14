@@ -1,176 +1,90 @@
 "use client";
-import Banner from "@/components/Banner/Banner";
-import Footer from "@/components/Footer/Footer";
-import Navbar from "@/components/Navbar/Navbar";
-import Pricing from "@/components/Pricing/Pricing";
-import ServicesSection from "@/components/Services/Services";
+import React from "react";
 import Image from "next/image";
-import { useState } from "react";
+import Footer from "../components/Footer/Footer";
+import Navbar from "../components/Navbar/Navbar";
+import ParticlesComponent from "../components/Particles/ParticlesBackground";
+import Pricing from "../components/Pricing/Pricing";
+import ServicesSection from "../components/Services/Services";
+import Banner from "../components/Banner/Banner";
+import WhyChooseUs from "../components/whychooseus/WhyChooseUs";
+import MigrationSection from "../components/migration/MigrationSection";
+import DomainOfferSection from "../components/domainsearch/DomainOfferSection";
+import TestimonialCarousel from "../components/testimonials/TestimonialSection";
 
 export default function Home() {
   return (
-    <section className=" pt-4">
-      <Navbar />
-      <Banner />
-      <div className="bg-white bg-opacity-10 mt-16">
-        <div className="max-w-[1270px] m-auto px-4 py-10 flex flex-col lg:flex-row justify-between">
-          <div className="flex flex-col gap-2 mb-6 lg:mb-0">
-            <h2 className="text-[30px] font-semibold text-center lg:text-left">
-              Get 10% Off Today
-            </h2>
-            <p className="text-gray-400 text-center lg:text-left">
-              Grab the holiday Offer. This will end in 3 days. Hurry Up!
-            </p>
-            <p className="text-gray-400 text-center lg:text-left">
-              Get your perfect domain from 148/Mo
-            </p>
-          </div>
-          <div className="flex flex-col gap-4 items-center lg:items-end">
-            <div className="flex items-center gap-2 bg-white text-black w-fit p-2 pl-4 rounded-lg">
-              <input
-                type="text"
-                className="bg-transparent w-[20em] outline-none max-md:w-[100%]"
-                placeholder="Type Your Domain Name"
-              />
-              <span className="font-semibold text-sm">.neoncloud.online</span>
-              <button className="domainbtn text-white px-7 py-3 rounded-lg cursor-pointer hover:scale-[1.03] transition">
-                Search
-              </button>
-            </div>
-            <p className="text-gray-400 text-center lg:text-left">
-              Only sub-domains are available at the moment tune it for upcoming
-              updates !!
-            </p>
-          </div>
-        </div>
-      </div>
+    <>
+      <section className="pt-4">
+        <Navbar />
+        <Banner />
+        <DomainOfferSection />
+        <ServicesSection />
+        <Pricing />
+        <WhyChooseUs />
+        <MigrationSection />
+        <TestimonialCarousel />
+        <div className="relative mt-16">
+          {/* Background gradients */}
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_70%)]" />
 
-      <ServicesSection />
-      <Pricing />
-      <div className="whychooseus">
-        <div className="max-w-[1270px] m-auto px-4 py-10">
-          <h2 className="text-4xl font-semibold text-center text-white">
-            Why Choose NeonCloud ?
-          </h2>
-          <p className="text-center text-sm text-gray-300 m-4">
-            With NeonCloud stand apart in the sphere of World Wide Web with
-            maximum flexibility offering elevated packages for all your business
-            needs ensuring smooth execution of your business activities.
-          </p>
-          <div className="flex flex-wrap justify-center gap-12">
-            <div className="grid gap-8 grid-cols-1 text-gray-300 sm:grid-cols-2 md:grid-cols-3">
-              <div className=" bg-secondary-gradient p-10 pt-16 max-md:pt-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
-                <div className="absolute bg-category-gradient p-5 rounded-full grid place-content-center top-[-30px]">
-                  <Image
-                    src={"/images/internet-speed-icon 1.png"}
-                    width={100}
-                    height={100}
-                    className="w-full h-full object-contain"
-                  />
+          {/* Animated background elements */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-purple-600/10 to-transparent rounded-full blur-3xl animate-pulse" />
+            <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-pink-600/10 to-transparent rounded-full blur-3xl animate-pulse" />
+          </div>
+
+          <div className="relative backdrop-blur-sm bg-white/[0.02] border border-white/[0.05] shadow-lg py-16">
+            <div className="max-w-[1270px] m-auto px-6">
+              <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
+                <div className="flex flex-col gap-4 lg:w-1/2">
+                  <div className="relative">
+                    <h2 className="text-[30px] font-semibold text-center lg:text-left bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+                      Subscribe to our Newsletter
+                    </h2>
+                    <div className="absolute -bottom-2 left-0 right-0 lg:right-auto w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto lg:mx-0" />
+                  </div>
+                  <p className="text-gray-400 text-center lg:text-left">
+                    Get Regular News and Exclusive Offers
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold ">Loading Speed</h3>
-                <p className="">
-                  Our super-fast network with latest and modern technology
-                  ensures accelerated response time and processing along with
-                  swift website page loading speed.{" "}
-                </p>
-              </div>
-              <div className=" bg-secondary-gradient p-10 pt-16 max-md:pt-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
-                <div className="absolute bg-category-gradient p-5 rounded-full grid place-content-center top-[-30px]">
-                  <Image
-                    src={"/images/cloud-computing-icon 1.png"}
-                    width={100}
-                    height={100}
-                    className="w-full h-full object-contain"
-                  />
+
+                <div className="flex flex-col gap-4 items-center lg:items-end lg:w-1/2">
+                  <div
+                    className="group flex items-stretch w-full max-w-md rounded-lg 
+                    bg-gradient-to-r from-white/[0.05] to-white/[0.01] 
+                    border border-white/[0.05] shadow-lg p-1
+                    hover:border-purple-500/50 transition-all duration-300"
+                  >
+                    <input
+                      type="email"
+                      className="flex-1 px-4 bg-transparent text-white outline-none placeholder-gray-400 min-w-0"
+                      placeholder="Enter your email"
+                    />
+                    <button
+                      className="relative px-7 py-4 rounded-md cursor-pointer 
+                      bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium
+                      hover:opacity-90 transition-all duration-300
+                      before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-600 before:to-pink-600
+                      before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100
+                      overflow-hidden shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.4)]"
+                    >
+                      Subscribe
+                    </button>
+                  </div>
+                  <p className="text-gray-400 text-center lg:text-right text-sm">
+                    We'll never share your email address with a third-party.
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold ">Network Security</h3>
-                <p className="">
-                  Our Certified Tier III and Green Data centers in India have
-                  the lowest latency with 4 different layers in our Software
-                  Defined Network.
-                </p>
-              </div>
-              <div className=" bg-secondary-gradient p-10 pt-16 max-md:pt-10 relative rounded-lg  flex flex-col items-left gap-3 mt-16">
-                <div className="absolute bg-category-gradient p-5 rounded-full grid place-content-center top-[-30px]">
-                  <Image
-                    src={"/images/secure-icon 1.png"}
-                    width={100}
-                    height={100}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <h3 className="text-xl font-semibold ">Hosting Reliability</h3>
-                <p className="">
-                  Equipped with an advanced infrastructure and server
-                  architectures together with sufficient resources help create a
-                  robust platform that ensures business continuity.
-                </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-16">
-        <div className="max-w-[1270px] m-auto px-4 py-10 max-">
-          <h2 className="text-4xl font-semibold text-center text-white">
-            Migration is not an issue with us{" "}
-          </h2>
-          <p className="text-center text-sm text-gray-300 m-4">
-            We provied free migration service so that ours customers can manage
-            their work easily
-          </p>
-          <div className="flex items-center justify-between gap-5  max-md:flex-col max-md:text-center">
-            <div className="flex flex-col gap-4">
-              <h3 className="text-[25px] w-full">Hassle Free Migration</h3>
-              <p className="text-gray-300">
-                Our technical expert team will help you to migrate your site
-                from your current hosting provider to Host.co.in, You don&apos;t have
-                to worry about any of the migration issues.
-              </p>
-              <button className="bg-custom-gradient max-md:m-auto p-3 px-10 cursor-pointer rounded-lg w-fit">
-                Contact Sales
-              </button>
-            </div>
-            <div className="grid place-content-center w-full">
-              <Image
-                width={500}
-                height={500}
-                className="w-full h-full object-contain"
-                src={"/images/Migration 4 1.png"}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="bg-white bg-opacity-10 mt-16">
-        <div className="max-w-[1270px] m-auto px-4 py-10 flex flex-col lg:flex-row justify-between">
-          <div className="flex flex-col gap-2 mb-6 lg:mb-0">
-            <h2 className="text-[30px] font-semibold text-center lg:text-left">
-              Subscribe to our Newsletter
-            </h2>
-            <p className="text-gray-400 text-center lg:text-left">
-              Get Regularly News and Exclusive Offers
-            </p>
-          </div>
-          <div className="flex flex-col gap-4 items-center lg:items-end">
-            <div className="flex items-center gap-2 bg-white text-black w-fit p-2 pl-4 rounded-lg">
-              <input
-                type="text"
-                className="bg-transparent w-[20em] outline-none max-md:w-[100%]"
-                placeholder="Email"
-              />
-              <button className="domainbtn text-white px-7 py-3 rounded-lg cursor-pointer hover:scale-[1.03] transition">
-                Subscribe
-              </button>
-            </div>
-            <p className="text-gray-400 text-center lg:text-left">
-              We’ll never share your email address with a third-party.
-            </p>
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </section>
+
+        <Footer />
+      </section>
+      <ParticlesComponent />
+    </>
   );
 }

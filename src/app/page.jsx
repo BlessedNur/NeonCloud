@@ -74,7 +74,7 @@ export default function Home() {
                     </button>
                   </div>
                   <p className="text-gray-400 text-center lg:text-right text-sm">
-                    We'll never share your email address with a third-party.
+                    We&apos;ll never share your email address with a third-party.
                   </p>
                 </div>
               </div>

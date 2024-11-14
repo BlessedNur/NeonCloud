@@ -25,6 +25,73 @@ const SocialLink = ({ href, icon: Icon }) => (
     <Icon size={18} />
   </a>
 );
+const Logo = () => (
+  <div className="flex items-center">
+    <div className="relative flex items-center">
+      {/* Stylized lightning bolt mark */}
+      <div className="relative w-8 h-8 mr-3">
+        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 rounded-lg opacity-80"></div>
+        <div className="absolute inset-[2px] bg-black/40 backdrop-blur-sm rounded-lg"></div>
+        {/* Lightning Bolt SVG */}
+        <svg 
+          viewBox="0 0 24 24" 
+          className="absolute inset-0 w-full h-full p-2"
+          style={{ filter: 'drop-shadow(0 0 4px rgba(207,8,140,0.5))' }}
+        >
+          <path 
+            d="M13 3L4 14h7l-2 7 9-11h-7l2-7z" 
+            fill="none" 
+            stroke="url(#lightning-gradient)" 
+            strokeWidth="1.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          />
+          <defs>
+            <linearGradient id="lightning-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="rgba(207,8,140,1)" />
+              <stop offset="100%" stopColor="#818cf8" />
+            </linearGradient>
+          </defs>
+        </svg>
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-[rgba(207,8,140,0.2)] rounded-lg blur-md"></div>
+      </div>
+      
+      {/* Text part */}
+      <div className="flex flex-col">
+        <div className="relative">
+          <span 
+            className="text-xl font-bold tracking-wide bg-gradient-to-r from-[rgba(207,8,140,1)] via-purple-500 to-blue-500 bg-clip-text text-transparent"
+            style={{ 
+              fontFamily: '"Exo 2", sans-serif',
+              letterSpacing: '0.02em',
+              filter: 'drop-shadow(0 0 8px rgba(207,8,140,0.3))'
+            }}
+          >
+            NEON
+          </span>
+          <span 
+            className="text-xl font-bold tracking-wide bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent"
+            style={{ 
+              fontFamily: '"Exo 2", sans-serif',
+              letterSpacing: '0.02em',
+              filter: 'drop-shadow(0 0 8px rgba(147,51,234,0.3))'
+            }}
+          >
+            CLOUD
+          </span>
+          <div 
+            className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-[rgba(207,8,140,0.5)] via-purple-500/50 to-blue-500/50"
+            style={{
+              filter: 'blur(0.5px)'
+            }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 
 function Footer() {
   return (
@@ -37,9 +104,7 @@ function Footer() {
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2 space-y-6">
             <div className="space-y-4">
-              <div className="logo text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                NeonCloud
-              </div>
+              <Logo/>
               <p className="text-gray-400 leading-relaxed">
                 Empowering businesses with cutting-edge cloud solutions. Our
                 innovative services drive digital transformation and enhance

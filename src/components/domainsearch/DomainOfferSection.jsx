@@ -1,32 +1,32 @@
-import { Search, Timer, Sparkles } from 'lucide-react';
+"use client";
+import { Search, Timer, Sparkles } from "lucide-react";
 
 const DomainOfferSection = () => {
   return (
     <div className="relative overflow-hidden">
-      {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 blur-3xl" />
-      
+
       <div className="bg-white/5 backdrop-blur-xl mt-16 shadow-2xl relative">
-        {/* Animated border gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
-        
+
         <div className="relative max-w-[1270px] m-auto px-6 py-16">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
-            {/* Left Content */}
             <div className="flex flex-col gap-4 lg:max-w-[50%]">
               <div className="flex items-center gap-2 mb-2">
                 <div className="animate-pulse">
                   <Sparkles className="w-5 h-5 text-yellow-400" />
                 </div>
-                <span className="text-yellow-400 font-medium text-sm">Limited Time Offer</span>
+                <span className="text-yellow-400 font-medium text-sm">
+                  Limited Time Offer
+                </span>
               </div>
-              
+
               <h2 className="text-4xl font-bold text-center lg:text-left">
                 <span className="bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent">
                   Get 10% Off Today
                 </span>
               </h2>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-center lg:text-left">
                   <Timer className="w-4 h-4 text-purple-400 hidden lg:block" />
@@ -38,20 +38,16 @@ const DomainOfferSection = () => {
                     </span>
                   </p>
                 </div>
-                
+
                 <p className="text-gray-300 text-center lg:text-left">
                   Get your perfect domain from
-                  <span className="text-white font-semibold ml-1">
-                    $148/Mo
-                  </span>
+                  <span className="text-white font-semibold ml-1">$148/Mo</span>
                 </p>
               </div>
             </div>
 
-            {/* Right Content */}
             <div className="flex flex-col gap-5 w-full lg:w-auto">
               <div className="group relative">
-                {/* Search Container */}
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl w-full lg:w-fit p-3 pl-4 rounded-xl border border-white/10 shadow-xl transition-all duration-300 hover:border-purple-500/30">
                   <Search className="w-5 h-5 text-gray-400" />
                   <input

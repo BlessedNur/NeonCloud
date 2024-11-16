@@ -9,9 +9,12 @@
   padding: 0;
   font-size: 14px;
 }
+html {
+  scroll-behavior: smooth;
+}
 body {
   /* background: linear-gradient(134.41deg, rgba(1, 4, 15, 0.95) 13.47%, #020613 56.64%, #020b18 90.93%); */
-background: black;
+  background: black;
   /* height:100vh; */
   color: white;
 }
@@ -26,4 +29,36 @@ background: black;
 }
 .service {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+/* src/components/Chatbot/Chatbot.css */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
 }

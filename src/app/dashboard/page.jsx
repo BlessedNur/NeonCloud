@@ -20,6 +20,7 @@ import {
   Menu,
   X,
   Moon,
+  User,
   Sun,
   Monitor,
   Cloud,
@@ -27,7 +28,10 @@ import {
   Database,
 } from "lucide-react";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
-
+import DashboardContent from "../../components/dashboardContent/DashboardContent";
+import DomainsContent from "../../components/domainSection/DomainsSection";
+import WebHostingContent from "../../components/webhostingsection/WebHostingContent";
+import ProfileContent from "../../components/profile/ProfileContent";
 // SidebarItem component
 const SidebarItem = ({ icon, text, active, onClick }) => (
   <button
@@ -52,14 +56,12 @@ const SidebarSection = ({ title, children }) => (
   </div>
 );
 
-const Logo = () => (
-  <div className="flex items-center">
+const Logo = ({ onclick }) => (
+  <div className="flex items-center cursor-pointer" onClick={onclick}>
     <div className="relative flex items-center">
-      {/* Stylized lightning bolt mark */}
       <div className="relative w-8 h-8 mr-3">
         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 rounded-lg opacity-80"></div>
         <div className="absolute inset-[2px] bg-black/40 backdrop-blur-sm rounded-lg"></div>
-        {/* Lightning Bolt SVG */}
         <svg
           viewBox="0 0 24 24"
           className="absolute inset-0 w-full h-full p-2"
@@ -86,11 +88,9 @@ const Logo = () => (
             </linearGradient>
           </defs>
         </svg>
-        {/* Glow effect */}
         <div className="absolute inset-0 bg-[rgba(207,8,140,0.2)] rounded-lg blur-md"></div>
       </div>
 
-      {/* Text part */}
       <div className="flex flex-col">
         <div className="relative">
           <span
@@ -129,55 +129,94 @@ const UserMenu = () => {
 
   return (
     <div
-      className="relative"
+      className="relative "
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center cursor-pointer">
-        <img
-          src="https://i.pravatar.cc/100"
-          alt="User"
-          className="w-8 h-8 rounded-full object-cover"
-        />
+      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 p-[2px] cursor-pointer">
+        <div className="w-full h-full rounded-full overflow-hidden bg-black/40 backdrop-blur-sm">
+          <img
+            src="https://i.pravatar.cc/100"
+            alt="User"
+            className="w-full h-full object-cover hover:scale-105 transition-transform"
+          />
+        </div>
       </div>
       {isHovered && (
-        <div className="absolute top-8 right-0 mt-2 w-64 bg-black/80 backdrop-blur-md rounded-md shadow-lg py-1 z-50 border border-white/10">
-          <div className="px-4 py-3 border-b border-gray-700/50">
-            <p className="text-sm leading-5 font-medium text-white">
-              Ilma Fortune
-            </p>
-            <p className="text-xs leading-4 font-medium text-gray-400 mt-1">
-              blessed@gmail.com
-            </p>
-          </div>
-          <div className="px-4 py-2">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs text-gray-400">Account Status</span>
-              <span className="text-xs font-semibold text-green-400">
-                Active
-              </span>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs text-gray-400">Plan</span>
-              <span className="text-xs font-semibold text-white">Pro</span>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs text-gray-400">Next Billing</span>
-              <span className="text-xs font-semibold text-white">
-                15 Dec 2024
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs text-gray-400">Storage Used</span>
-              <span className="text-xs font-semibold text-white">
-                75% (75GB/100GB)
-              </span>
+        <div className="absolute top-8 right-0 mt-2 w-72 bg-black/80 backdrop-blur-md rounded-lg shadow-lg py-1 z-40 border border-white/10">
+          <div className="px-4 py-3 border-b border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 p-[2px]">
+                <div className="w-full h-full rounded-full overflow-hidden bg-black/40 backdrop-blur-sm">
+                  <img
+                    src="https://i.pravatar.cc/100"
+                    alt="User"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-white">John Doe</p>
+                <p className="text-xs text-gray-400">john.doe@example.com</p>
+              </div>
             </div>
           </div>
-          <div className="border-t border-gray-700/50 mt-2 pt-2">
-            <UserMenuItem icon={<Eye size={14} />} text="View Profile" />
-            <UserMenuItem icon={<HelpCircle size={14} />} text="Help Center" />
-            <UserMenuItem icon={<LogOut size={14} />} text="Sign Out" />
+
+          <div className="px-4 py-3 space-y-3">
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-400">Subscription Plan</span>
+                <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-600 text-white">
+                  Pro Plan
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-400">Storage Usage</span>
+                  <span className="text-xs text-white">75GB / 100GB</span>
+                </div>
+                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-600 rounded-full"
+                    style={{ width: "75%" }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-400">Next Billing</span>
+                <span className="text-xs text-white">Dec 15, 2024</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-400">Account Status</span>
+                <span className="text-xs text-green-400 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                  Active
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-white/10 mt-2 pt-1">
+            <UserMenuItem
+              icon={<User size={14} />}
+              text="View Profile"
+              onClick={() => {}}
+            />
+            <UserMenuItem
+              icon={<HelpCircle size={14} />}
+              text="Help Center"
+              onClick={() => {}}
+            />
+            <UserMenuItem
+              icon={<LogOut size={14} />}
+              text="Sign Out"
+              onClick={() => {}}
+              className="text-red-400 hover:text-red-300"
+            />
           </div>
         </div>
       )}
@@ -185,60 +224,34 @@ const UserMenu = () => {
   );
 };
 
-const UserMenuItem = ({ icon, text }) => (
-  <a
-    href="#"
-    className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"
+const UserMenuItem = ({ icon, text, onClick, className = "" }) => (
+  <button
+    onClick={onClick}
+    className={`w-full px-4 py-2 text-sm hover:bg-white/5 transition-colors flex items-center gap-2 ${className}`}
   >
     {icon}
-    {text}
-  </a>
+    <span>{text}</span>
+  </button>
 );
 
-// New ThemeSwitcher component// Replace the existing ThemeSwitcher component with this:
-const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    // Check initial theme
-    const savedTheme = localStorage.getItem("theme");
-    setIsDark(savedTheme === "dark");
-
-    // Check system preference
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    if (!savedTheme) {
-      setIsDark(mediaQuery.matches);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = isDark ? "light" : "dark";
-    setIsDark(!isDark);
-    localStorage.setItem("theme", newTheme);
-    // Here you would implement the actual theme change logic
-    document.documentElement.classList.toggle("dark");
+const SignOut = () => {
+  const handleSignOut = () => {
+    console.log("Signing out...");
   };
 
   return (
-    <div className="p-4 border-t border-white/10">
-      <div className="flex items-center justify-between ">
-        <span className="text-sm text-gray-400 flex items-center gap-2">
-          {isDark ? <Moon size={16} /> : <Sun size={16} />}
-          {isDark ? "Dark" : "Light"} Mode
-        </span>
-        <button
-          onClick={toggleTheme}
-          className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none"
-          style={{ backgroundColor: isDark ? "rgba(207,8,140,1)" : "#374151" }}
-        >
-          <span
-            className={`${
-              isDark ? "translate-x-6" : "translate-x-1"
-            } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300`}
-          />
-        </button>
-      </div>
-    </div>
+    <button
+      onClick={handleSignOut}
+      className="w-full p-4 border-t border-white/10 flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
+    >
+      <LogOut
+        size={16}
+        className="group-hover:text-[rgba(207,8,140,1)] transition-colors"
+      />
+      <span className="text-sm group-hover:text-[rgba(207,8,140,1)]">
+        Sign Out
+      </span>
+    </button>
   );
 };
 
@@ -253,16 +266,15 @@ function Page() {
   ];
 
   const accountMenuItems = [
-    { icon: <Shield size={16} />, text: "Security", id: "account" },
-    { icon: <CreditCard size={16} />, text: "Billing", id: "billing" },
+    { icon: <User size={16} />, text: "Profile", id: "profile" },
   ];
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-hidden">
-        <header className="bg-black/50 backdrop-blur-md border-b border-white/10 p-4 flex-shrink-0 relative ">
+      <section className="h-screen flex flex-col overflow-hidden">
+        <header className="bg-black/50 backdrop-blur-md border-b border-white/10 p-4 flex-shrink-0 relative z-30 ">
           <div className="flex items-center justify-between mx-auto">
             <div className="flex items-center gap-4">
               <button
@@ -271,7 +283,7 @@ function Page() {
               >
                 <Menu size={20} />
               </button>
-              <Logo />
+              <Logo onclick={() => router.push("/")} />
             </div>
             <div className="flex items-center gap-2 md:gap-4">
               <button className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors">
@@ -285,17 +297,15 @@ function Page() {
           </div>
         </header>
         <div className="flex flex-1 text-white overflow-hidden">
-          {/* Mobile Sidebar Overlay */}
           {isSidebarOpen && (
             <div
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/50 z-50 lg:hidden"
               onClick={toggleSidebar}
             />
           )}
 
-          {/* Sidebar */}
           <div
-            className={`fixed lg:static inset-y-0 left-0 w-64 bg-black/50 backdrop-blur-md border-r border-white/5 flex flex-col overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+            className={`fixed lg:static inset-y-0 z-[60] left-0 w-64 bg-black/50 backdrop-blur-md border-r border-white/5 flex flex-col overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
@@ -340,24 +350,26 @@ function Page() {
                 </SidebarSection>
               </div>
             </div>
-
-            {/* Theme Switcher */}
-            <ThemeToggle />
+            <SignOut />{" "}
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 -z-1 flex flex-col overflow-hidden">
             <main className="flex-1 overflow-auto p-4 md:p-6">
               <div className="max-w-[1270px] mx-auto">
-                <p>Welcome to your {activeTab} page!</p>
+                {activeTab === "dashboard" && <DashboardContent />}
+                {activeTab === "domain" && <DomainsContent />}
+                {activeTab === "hosting" && <WebHostingContent />}
+                {activeTab === "profile" && <ProfileContent />}
+                {activeTab === "billing" && <BillingContent />}
               </div>
             </main>
           </div>
         </div>
-      </div>
+      </section>
       <ParticlesComponent />
     </>
   );
 }
 
 export default Page;
+

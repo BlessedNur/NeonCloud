@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
 import ParticlesComponent from "../components/Particles/ParticlesBackground";
 import Pricing from "../components/Pricing/Pricing";
 import ServicesSection from "../components/Services/Services";
+
 import Banner from "../components/Banner/Banner";
 import WhyChooseUs from "../components/whychooseus/WhyChooseUs";
 import MigrationSection from "../components/migration/MigrationSection";
@@ -25,11 +26,9 @@ export default function Home() {
         <MigrationSection />
         <TestimonialCarousel />
         <div className="relative mt-16">
-          {/* Background gradients */}
           <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_70%)]" />
 
-          {/* Animated background elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-purple-600/10 to-transparent rounded-full blur-3xl animate-pulse" />
             <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-pink-600/10 to-transparent rounded-full blur-3xl animate-pulse" />
@@ -74,7 +73,8 @@ export default function Home() {
                     </button>
                   </div>
                   <p className="text-gray-400 text-center lg:text-right text-sm">
-                    We&apos;ll never share your email address with a third-party.
+                    We&apos;ll never share your email address with a
+                    third-party.
                   </p>
                 </div>
               </div>
@@ -84,6 +84,8 @@ export default function Home() {
 
         <Footer />
       </section>
+
+      
       <ParticlesComponent />
     </>
   );

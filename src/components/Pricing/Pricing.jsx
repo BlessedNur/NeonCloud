@@ -3,10 +3,10 @@ import { Check, X, Sparkles, Tag, Clock } from "lucide-react";
 
 const plans = [
   {
-    title: "Basic",
-    monthlyPrice: "$10",
-    yearlyPrice: "$100",
-    discount: "10%",
+    title: "Basic - Free",
+    monthlyPrice: "$0",
+    yearlyPrice: "$0",
+    discount: "0%",
     period: {
       monthly: "/month",
       yearly: "/year",
@@ -24,7 +24,7 @@ const plans = [
       { name: "Dedicated IP Address", included: false },
     ],
     isHighlighted: false,
-    tag: "Starter",
+    tag: "Starter Pack",
   },
   {
     title: "Professional",
@@ -109,7 +109,7 @@ const PlanCard = ({
         isHighlighted
           ? "bg-gradient-to-br from-purple-600 to-pink-600 shadow-xl scale-105"
           : "bg-gradient-to-br from-gray-900 to-gray-800"
-      } p-8  pt-14 rounded-2xl transition-all duration-300 hover:transform hover:scale-[1.02] border border-gray-700`}
+      } p-8 pt-14 rounded-2xl transition-all duration-300 hover:transform hover:scale-[1.02] border border-gray-700`}
     >
       {/* Tag Banner */}
       <div className="absolute -top-4 -right-2">
@@ -127,7 +127,7 @@ const PlanCard = ({
       {parseFloat(discount) > 0 && (
         <div className="absolute top-8 left-0 right-0">
           <div className="relative">
-            <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 p-2 transform rotate-2">
+            <div className="bg-gradient-to-r  from-yellow-400 via-orange-500 to-red-500 p-2 transform rotate-2">
               <div className="flex items-center justify-center gap-2 text-gray-900 font-bold text-sm">
                 <Clock className="w-4 h-4 animate-pulse" />
                 <span>Limited Time Deal!</span>
@@ -217,7 +217,7 @@ const Pricing = () => {
   const [isMonthly, setIsMonthly] = useState(true);
 
   return (
-    <div className="py-20">
+    <div className="py-20" id="pricing">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">

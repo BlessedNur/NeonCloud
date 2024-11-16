@@ -1,0 +1,353 @@
+"use client";
+import React, { useState } from "react";
+import { Eye, EyeOff, Mail, Lock, Github, Chrome } from "lucide-react";
+import Link from "next/link";
+import ParticlesComponent from "../../components/Particles/ParticlesBackground";
+import { useRouter } from "next/navigation";
+
+const SocialButton = ({ icon: Icon, label, onClick, variant }) => {
+  const getVariantStyles = () => {
+    switch (variant) {
+      case "github":
+        return "border-gray-600 hover:bg-gray-800";
+      case "google":
+        return "border-blue-500 hover:bg-blue-500/10";
+      default:
+        return "border-gray-600 hover:bg-gray-800";
+    }
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg border ${getVariantStyles()} transition-all duration-200`}
+    >
+      <Icon size={20} />
+      <span>Continue with {label}</span>
+    </button>
+  );
+};
+
+const InputField = ({
+  icon: Icon,
+  type,
+  placeholder,
+  value,
+  onChange,
+  error,
+  showPasswordToggle,
+  onTogglePassword,
+  showPassword,
+}) => (
+  <div className="space-y-2">
+    <div className="relative">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+        <Icon size={20} />
+      </div>
+      <input
+        type={showPasswordToggle ? (showPassword ? "text" : "password") : type}
+        className={`w-full bg-white/5 border ${
+          error ? "border-red-500" : "border-white/10"
+        } rounded-lg py-3 px-12 focus:outline-none focus:border-[rgba(207,8,140,1)] transition-colors placeholder-gray-500`}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+      {showPasswordToggle && (
+        <button
+          type="button"
+          onClick={onTogglePassword}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
+      )}
+    </div>
+    {error && <p className="text-red-500 text-sm">{error}</p>}
+  </div>
+);
+
+const Logo = ({onclick}) => (
+  <div
+    className="fixed top-7 left-7 flex cursor-pointer items-center"
+    onClick={onclick}
+  >
+    <div className="relative flex items-center">
+      {/* Stylized lightning bolt mark */}
+      <div className="relative w-8 h-8 mr-3">
+        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 rounded-lg opacity-80"></div>
+        <div className="absolute inset-[2px] bg-black/40 backdrop-blur-sm rounded-lg"></div>
+        {/* Lightning Bolt SVG */}
+        <svg
+          viewBox="0 0 24 24"
+          className="absolute inset-0 w-full h-full p-2"
+          style={{ filter: "drop-shadow(0 0 4px rgba(207,8,140,0.5))" }}
+        >
+          <path
+            d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"
+            fill="none"
+            stroke="url(#lightning-gradient)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <defs>
+            <linearGradient
+              id="lightning-gradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop offset="0%" stopColor="rgba(207,8,140,1)" />
+              <stop offset="100%" stopColor="#818cf8" />
+            </linearGradient>
+          </defs>
+        </svg>
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-[rgba(207,8,140,0.2)] rounded-lg blur-md"></div>
+      </div>
+
+      {/* Text part */}
+      <div className="flex flex-col">
+        <div className="relative">
+          <span
+            className="text-xl font-bold tracking-wide bg-gradient-to-r from-[rgba(207,8,140,1)] via-purple-500 to-blue-500 bg-clip-text text-transparent"
+            style={{
+              fontFamily: '"Exo 2", sans-serif',
+              letterSpacing: "0.02em",
+              filter: "drop-shadow(0 0 8px rgba(207,8,140,0.3))",
+            }}
+          >
+            NEON
+          </span>
+          <span
+            className="text-xl font-bold tracking-wide bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent"
+            style={{
+              fontFamily: '"Exo 2", sans-serif',
+              letterSpacing: "0.02em",
+              filter: "drop-shadow(0 0 8px rgba(147,51,234,0.3))",
+            }}
+          >
+            CLOUD
+          </span>
+          <div
+            className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-[rgba(207,8,140,0.5)] via-purple-500/50 to-blue-500/50"
+            style={{
+              filter: "blur(0.5px)",
+            }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+function Page() {
+  const router = useRouter()
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Handle successful login here
+      console.log("Login successful", formData);
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Logo  onclick={()=>router.push("/")}/>
+      <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
+        <div className="w-full max-w-md">
+          {/* Logo and Title */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-[rgba(207,8,140,1)] via-purple-500 to-blue-500 bg-clip-text text-transparent mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-gray-400">
+              Sign in to continue to your dashboard
+            </p>
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="space-y-3 mb-8">
+            <SocialButton
+              icon={Github}
+              label="GitHub"
+              variant="github"
+              onClick={() => console.log("GitHub login")}
+            />
+            <SocialButton
+              icon={Chrome}
+              label="Google"
+              variant="google"
+              onClick={() => console.log("Google login")}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className="relative mb-8">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/10"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-black text-gray-400">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <InputField
+              icon={Mail}
+              type="email"
+              placeholder="Email address"
+              value={formData.email}
+              onChange={(e) =>
+                handleInputChange({
+                  target: { name: "email", value: e.target.value },
+                })
+              }
+              error={errors.email}
+            />
+
+            <InputField
+              icon={Lock}
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) =>
+                handleInputChange({
+                  target: { name: "password", value: e.target.value },
+                })
+              }
+              error={errors.password}
+              showPasswordToggle
+              onTogglePassword={() => setShowPassword(!showPassword)}
+              showPassword={showPassword}
+            />
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-white/10 bg-white/5 text-[rgba(207,8,140,1)] focus:ring-[rgba(207,8,140,1)] focus:ring-offset-0"
+                />
+                <span>Remember me</span>
+              </label>
+              <Link
+                href="/forgot_password"
+                className="text-[rgba(207,8,140,1)] hover:text-[rgba(207,8,140,0.8)] transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 px-4 bg-[rgba(207,8,140,1)] text-white rounded-lg hover:bg-[rgba(207,8,140,0.8)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span>Signing in...</span>
+                </div>
+              ) : (
+                "Sign in"
+              )}
+            </button>
+          </form>
+
+          {/* Sign Up Link */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-400">Not a member yet?</p>
+            <Link
+              href="/pricing"
+              className="text-[rgba(207,8,140,1)] hover:text-[rgba(207,8,140,0.8)] transition-colors text-lg font-medium"
+            >
+              Choose a hosting plan and get started now!
+            </Link>
+          </div>
+
+          {/* Security Note */}
+          <div className="mt-8 text-center text-sm text-gray-400">
+            <p>Protected by reCAPTCHA and subject to our</p>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <Link
+                href="/privacy"
+                className="hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <span>and</span>
+              <Link
+                href="/terms"
+                className="hover:text-white transition-colors"
+              >
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Background Gradient */}
+        <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
+      </div>
+      <ParticlesComponent />
+    </>
+  );
+}
+
+export default Page;

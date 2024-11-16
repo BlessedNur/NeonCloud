@@ -179,7 +179,7 @@ const TestimonialCarousel = () => {
                         <span className="text-xs md:text-sm text-purple-400">
                           Verified Customer
                         </span>
-                        <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-purple-500/20 flex items-center justify-center">
+                        <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-purple-500/20 flex animate-pulse items-center justify-center">
                           <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-purple-500" />
                         </div>
                       </div>

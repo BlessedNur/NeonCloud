@@ -1,56 +1,61 @@
-import { useState } from "react";
-import Image from "next/image";
-import { 
-  Zap, 
-  Shield, 
-  Server, 
-  Clock, 
-  HeartHandshake, 
+"use client";
+import {
+  Zap,
+  Shield,
+  Server,
+  Clock,
+  HeartHandshake,
   Cpu,
   Globe,
   BarChart,
-  Headphones
+  Headphones,
 } from "lucide-react";
 
 const features = [
   {
     title: "Lightning-Fast Performance",
-    description: "Experience blazing-fast load times with our optimized infrastructure. Our advanced caching and CDN ensure your website performs at peak efficiency globally.",
+    description:
+      "Experience blazing-fast load times with our optimized infrastructure. Our advanced caching and CDN ensure your website performs at peak efficiency globally.",
     icon: Zap,
     stats: "400% Faster",
     gradient: "from-yellow-500 to-orange-500",
   },
   {
     title: "Enterprise Security",
-    description: "Military-grade encryption and multi-layer security protocols protect your data. Regular security audits and DDoS protection keep your business safe 24/7.",
+    description:
+      "Military-grade encryption and multi-layer security protocols protect your data. Regular security audits and DDoS protection keep your business safe 24/7.",
     icon: Shield,
     stats: "99.99% Protected",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
     title: "Guaranteed Uptime",
-    description: "Our redundant infrastructure and automated failover systems ensure your website stays online. Backed by our industry-leading uptime guarantee.",
+    description:
+      "Our redundant infrastructure and automated failover systems ensure your website stays online. Backed by our industry-leading uptime guarantee.",
     icon: Server,
     stats: "99.95% Uptime",
     gradient: "from-green-500 to-emerald-500",
   },
   {
     title: "24/7 Expert Support",
-    description: "Our dedicated team of experts is available round the clock to assist you. Get professional help within minutes, not hours.",
+    description:
+      "Our dedicated team of experts is available round the clock to assist you. Get professional help within minutes, not hours.",
     icon: Headphones,
     stats: "3min Response",
     gradient: "from-purple-500 to-pink-500",
   },
   {
     title: "Global Infrastructure",
-    description: "Strategically located data centers across the globe ensure low latency and superior performance for your visitors worldwide.",
+    description:
+      "Strategically located data centers across the globe ensure low latency and superior performance for your visitors worldwide.",
     icon: Globe,
     stats: "12 Locations",
     gradient: "from-indigo-500 to-purple-500",
   },
   {
     title: "Smart Scaling",
-    description: "Automatically scale resources based on your needs. Pay only for what you use with our flexible resource allocation system.",
+    description:
+      "Automatically scale resources based on your needs. Pay only for what you use with our flexible resource allocation system.",
     icon: BarChart,
     stats: "Auto-Scaling",
     gradient: "from-pink-500 to-rose-500",
@@ -67,9 +72,9 @@ const WhyChooseUs = () => {
             Why Choose NeonCloud?
           </h2>
           <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Experience the perfect blend of performance, security, and reliability. 
-            Our cutting-edge infrastructure and dedicated support ensure your business 
-            thrives in the digital landscape.
+            Experience the perfect blend of performance, security, and
+            reliability. Our cutting-edge infrastructure and dedicated support
+            ensure your business thrives in the digital landscape.
           </p>
         </div>
 
@@ -83,7 +88,9 @@ const WhyChooseUs = () => {
               <div className="p-8">
                 {/* Icon & Stats */}
                 <div className="flex items-center justify-between mb-6">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} opacity-75 group-hover:opacity-100 transition-opacity duration-300`}>
+                  <div
+                    className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} opacity-75 group-hover:opacity-100 transition-opacity duration-300`}
+                  >
                     <feature.icon className="w-6 h-6 text-white" />
                   </div>
                   <span className="text-sm font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">

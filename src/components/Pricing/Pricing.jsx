@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { Check, X, Sparkles, Tag, Clock } from "lucide-react";
 

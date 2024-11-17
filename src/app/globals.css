@@ -9,6 +9,10 @@
   padding: 0;
   font-size: 14px;
 }
+:root {
+  --neon-primary: rgb(207, 8, 140);
+  --neon-error: rgb(255, 0, 0);
+}
 html {
   scroll-behavior: smooth;
 }
@@ -31,26 +35,6 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
-/* src/components/Chatbot/Chatbot.css */
-.typing-indicator {
-  display: flex;
-  gap: 4px;
-}
-
-.typing-indicator span {
-  width: 8px;
-  height: 8px;
-  background-color: #e2e8f0;
-  border-radius: 50%;
-  animation: bounce 1.4s infinite ease-in-out;
-}
-
-.typing-indicator span:nth-child(1) {
-  animation-delay: -0.32s;
-}
-.typing-indicator span:nth-child(2) {
-  animation-delay: -0.16s;
-}
 
 @keyframes bounce {
   0%,
@@ -60,5 +44,23 @@ body {
   }
   40% {
     transform: scale(1);
+  }
+}
+
+.neoncloud-toast {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Neon glow animation for toasts */
+.neoncloud-toast {
+  animation: neonPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neonPulse {
+  from {
+    box-shadow: 0 0 10px rgba(207, 8, 140, 0.2);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(207, 8, 140, 0.4);
   }
 }

@@ -2,7 +2,7 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://neoncloud.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://neoncloud.io'
   
   return {
     rules: {
@@ -12,10 +12,10 @@ export default function robots(): MetadataRoute.Robots {
         '/api/',
         '/admin/',
         '/private/',
-        
+
       ],
     },
-    sitemap: `${baseUrl}/sitemap.xml`, // Next.js automatically handles the .xml extension
+    sitemap: `${baseUrl}/sitemap.xml`, 
     host: baseUrl,
   }
 }

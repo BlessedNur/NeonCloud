@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Get your base URL from environment variable
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://neoncloud.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://neoncloud.io'
   
   // Define your static routes
   const staticRoutes = [

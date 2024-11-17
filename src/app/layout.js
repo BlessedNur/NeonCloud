@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import Head from "next/head";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -10,10 +11,13 @@ export const metadata = {
   title: "NeonCloud | Modern Web Hosting & Deployment Platform",
   description:
     "Deploy your web applications instantly with NeonCloud. Features include one-click deployment, continuous integration, custom domains, and automatic HTTPS. Start hosting for free.",
+  verification: {
+    google: "cBkIpxf4CKHqnk_hQ0GHrq1NbgpbJHTwp5kIxeAnRX0", 
+  },
   keywords:
     "web hosting, cloud hosting, deployment platform, free hosting, continuous deployment, CI/CD, web deployment, NeonCloud",
   alternates: {
-    canonical: "https://neoncloud.com",
+    canonical: "https://neoncloud.vercel.app",
   },
   openGraph: {
     title: "NeonCloud - Modern Web Hosting Platform",
@@ -23,7 +27,7 @@ export const metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/og-image.jpg", // Make sure to create this image
+        url: "/images/logo.png", 
         width: 1200,
         height: 630,
         alt: "NeonCloud Platform Preview",
@@ -41,6 +45,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+       <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <link rel="icon" href="/favicon.ico?v=2" />
+      </Head>
+
       <body className={poppins.className}>
         {children}
         <Toaster

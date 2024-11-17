@@ -103,11 +103,9 @@ const Logo = ({ onclick }) => (
     onClick={onclick}
   >
     <div className="relative flex items-center">
-      {/* Stylized lightning bolt mark */}
       <div className="relative w-8 h-8 mr-3">
         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 rounded-lg opacity-80"></div>
         <div className="absolute inset-[2px] bg-black/40 backdrop-blur-sm rounded-lg"></div>
-        {/* Lightning Bolt SVG */}
         <svg
           viewBox="0 0 24 24"
           className="absolute inset-0 w-full h-full p-2"
@@ -134,11 +132,9 @@ const Logo = ({ onclick }) => (
             </linearGradient>
           </defs>
         </svg>
-        {/* Glow effect */}
         <div className="absolute inset-0 bg-[rgba(207,8,140,0.2)] rounded-lg blur-md"></div>
       </div>
 
-      {/* Text part */}
       <div className="flex flex-col">
         <div className="relative">
           <span
@@ -230,9 +226,8 @@ function Page() {
   return (
     <>
       <Logo onclick={() => router.push("/")} />
-      <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
-          {/* Back Link - Only show on error or resend success */}
+      <div className="min-h-screen relative z-10 bg-black text-white flex items-center justify-center p-6">
+        <div className="w-full relative z-10 max-w-md">
           {(verificationState === VerificationState.ERROR ||
             verificationState === VerificationState.RESEND_SUCCESS) && (
             <Link
@@ -244,7 +239,6 @@ function Page() {
             </Link>
           )}
 
-          {/* Main Card */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
             <StateDisplay
               state={verificationState}
@@ -254,7 +248,6 @@ function Page() {
             />
           </div>
 
-          {/* Help Text */}
           <div className="mt-8 text-center text-sm text-gray-400">
             <p>
               Need help?{" "}
@@ -268,7 +261,6 @@ function Page() {
           </div>
         </div>
 
-        {/* Background Gradient */}
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
       </div>
       <ParticlesComponent />

@@ -237,7 +237,6 @@ function Page() {
     setWarning("");
     setError("");
 
-    // Basic validation - only check if passwords match
     if (!formData.password) {
       setError("Password is required");
       return false;
@@ -248,7 +247,6 @@ function Page() {
       return false;
     }
 
-    // Check password strength and set warnings but don't prevent submission
     const strengthChecks = {
       length: formData.password.length >= 8,
       uppercase: /[A-Z]/.test(formData.password),
@@ -282,11 +280,9 @@ function Page() {
     setIsLoading(true);
 
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setIsSuccess(true);
 
-      // Redirect after success (simulate)
       setTimeout(() => {
         window.location.href = "/signin";
       }, 2000);
@@ -300,8 +296,8 @@ function Page() {
   return (
     <>
       <Logo onclick={() => router.push("/")} />
-      <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
+      <div className="min-h-screen relative z-10 bg-black text-white flex items-center justify-center p-6">
+        <div className="w-full relative z-10 max-w-md">
           <Link
             href="/signin"
             className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"

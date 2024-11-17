@@ -217,7 +217,7 @@ function Page() {
             <span>Back </span>
           </Link>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 space-y-6">
+          <div className="bg-white/5 relative z-10 border border-white/10 rounded-2xl p-8 space-y-6">
             <div className="text-center space-y-2">
               <div className="w-16 h-16 bg-[rgba(207,8,140,0.1)] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Smartphone className="w-8 h-8 text-[rgba(207,8,140,1)]" />

@@ -73,11 +73,9 @@ const Logo = ({onclick}) => (
     onClick={onclick}
   >
     <div className="relative flex items-center">
-      {/* Stylized lightning bolt mark */}
       <div className="relative w-8 h-8 mr-3">
         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 rounded-lg opacity-80"></div>
         <div className="absolute inset-[2px] bg-black/40 backdrop-blur-sm rounded-lg"></div>
-        {/* Lightning Bolt SVG */}
         <svg
           viewBox="0 0 24 24"
           className="absolute inset-0 w-full h-full p-2"
@@ -104,11 +102,9 @@ const Logo = ({onclick}) => (
             </linearGradient>
           </defs>
         </svg>
-        {/* Glow effect */}
         <div className="absolute inset-0 bg-[rgba(207,8,140,0.2)] rounded-lg blur-md"></div>
       </div>
 
-      {/* Text part */}
       <div className="flex flex-col">
         <div className="relative">
           <span
@@ -208,8 +204,7 @@ function Page() {
     <>
       <Logo  onclick={()=>router.push("/")}/>
       <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
-          {/* Logo and Title */}
+        <div className="w-full relative z-10 max-w-md">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-[rgba(207,8,140,1)] via-purple-500 to-blue-500 bg-clip-text text-transparent mb-2">
               Welcome Back
@@ -219,7 +214,6 @@ function Page() {
             </p>
           </div>
 
-          {/* Social Login Buttons */}
           <div className="space-y-3 mb-8">
             <SocialButton
               icon={Github}
@@ -235,7 +229,6 @@ function Page() {
             />
           </div>
 
-          {/* Divider */}
           <div className="relative mb-8">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/10"></div>
@@ -247,7 +240,6 @@ function Page() {
             </div>
           </div>
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <InputField
               icon={Mail}
@@ -310,7 +302,6 @@ function Page() {
             </button>
           </form>
 
-          {/* Sign Up Link */}
           <div className="mt-8 text-center">
             <p className="text-gray-400">Not a member yet?</p>
             <Link
@@ -321,7 +312,6 @@ function Page() {
             </Link>
           </div>
 
-          {/* Security Note */}
           <div className="mt-8 text-center text-sm text-gray-400">
             <p>Protected by reCAPTCHA and subject to our</p>
             <div className="flex items-center justify-center gap-2 mt-1">
@@ -342,7 +332,6 @@ function Page() {
           </div>
         </div>
 
-        {/* Background Gradient */}
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
       </div>
       <ParticlesComponent />

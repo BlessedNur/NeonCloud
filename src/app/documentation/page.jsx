@@ -329,7 +329,7 @@ cd my-project`}
                   </li>
                 </ol>
                 <p className="text-gray-400">
-                  That's it! Your application is now live on NeonCloud. Visit
+                  That&apos;s it! Your application is now live on NeonCloud. Visit
                   the URL provided in the CLI output to see your deployed app.
                 </p>
               </div>
@@ -349,7 +349,7 @@ cd my-project`}
                   <li>Node.js (version 14 or later)</li>
                   <li>npm or yarn package manager</li>
                   <li>
-                    A NeonCloud account (sign up at neoncloud.com if you haven't
+                    A NeonCloud account (sign up at neoncloud.com if you haven&apos;t
                     already)
                   </li>
                 </ul>
@@ -386,7 +386,7 @@ yarn global add neoncloud-cli`}
                   </li>
                 </ol>
                 <p className="text-gray-400">
-                  You're now ready to start using NeonCloud! Check out the Quick
+                  You&apos;re now ready to start using NeonCloud! Check out the Quick
                   Start guide to deploy your first application.
                 </p>
               </div>
@@ -398,8 +398,8 @@ yarn global add neoncloud-cli`}
                   NeonCloud Architecture
                 </h1>
                 <p className="text-gray-400 mb-6">
-                  Understanding NeonCloud's architecture will help you make the
-                  most of our platform's capabilities.
+                  Understanding NeonCloud&apos;s architecture will help you make the
+                  most of our platform&apos;s capabilities.
                 </p>
                 <h2 className="text-2xl font-semibold mb-4">Core Components</h2>
                 <ul className="space-y-4 mb-8">
@@ -794,7 +794,7 @@ console.log('Received:', data);
                   Cloud Deployment
                 </h1>
                 <p className="text-gray-400 mb-6">
-                  Learn how to deploy your applications to NeonCloud's global
+                  Learn how to deploy your applications to NeonCloud&apos;s global
                   infrastructure.
                 </p>
                 <h2 className="text-2xl font-semibold mb-4">

@@ -64,8 +64,8 @@ const Page = () => {
             Lost in the digital void?
           </h2>
           <p className="text-gray-400 text-base sm:text-lg px-4">
-            The page you're looking for has vanished into the digital ether.
-            Don't worry though, our homepage is just a click away.
+            The page you&apos;re looking for has vanished into the digital ether.
+            Don&apos;t worry though, our homepage is just a click away.
           </p>
 
           <Link href="/">

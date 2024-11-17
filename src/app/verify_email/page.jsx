@@ -79,11 +79,11 @@ const StateDisplay = ({ state, email, error, onResend }) => {
         </div>
         <h2 className="text-xl font-semibold">Verification Email Sent!</h2>
         <p className="text-gray-400">
-          We've sent a new verification email to{" "}
+          We&apos;ve sent a new verification email to{" "}
           <span className="font-medium text-white">{email}</span>
         </p>
         <div className="text-sm text-gray-400 mt-4">
-          <p>Didn't receive the email?</p>
+          <p>Didn&apos;t receive the email?</p>
           <button
             onClick={onResend}
             className="text-[rgba(207,8,140,1)] hover:text-[rgba(207,8,140,0.8)] transition-colors mt-2"

@@ -173,7 +173,7 @@ function Page() {
             <PolicySection icon={Clock} title="Policy Updates" id="updates">
               <p>
                 We may update this privacy policy from time to time. We will notify you of any 
-                changes by posting the new policy on this page and updating the "Last updated" date.
+                changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.
               </p>
             </PolicySection>
 

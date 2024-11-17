@@ -69,7 +69,7 @@ function Page() {
               Powering the Future of Cloud Computing
             </h1>
             <p className="text-xl text-gray-400">
-              At NeonCloud, we're revolutionizing how businesses harness the
+              At NeonCloud, we&apos;re revolutionizing how businesses harness the
               power of cloud technology. Our mission is to make enterprise-grade
               cloud solutions accessible to everyone.
             </p>

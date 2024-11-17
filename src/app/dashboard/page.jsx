@@ -360,7 +360,6 @@ function Page() {
                 {activeTab === "domain" && <DomainsContent />}
                 {activeTab === "hosting" && <WebHostingContent />}
                 {activeTab === "profile" && <ProfileContent />}
-                {activeTab === "billing" && <BillingContent />}
               </div>
             </main>
           </div>

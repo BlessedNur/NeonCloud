@@ -164,8 +164,8 @@ function Page() {
               Frequently Asked Questions
             </h1>
             <p className="text-gray-400 mb-8">
-              Find answers to common questions about our services. Can't find
-              what you're looking for? Our support team is here to help 24/7.
+              Find answers to common questions about our services. Can&apos;t find
+              what you&apos;re looking for? Our support team is here to help 24/7.
             </p>
 
             {/* Search Bar */}

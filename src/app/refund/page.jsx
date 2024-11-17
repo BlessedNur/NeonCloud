@@ -232,7 +232,7 @@ function Page() {
               title="Refund Process"
             >
               <p className="mb-6">
-                To ensure a smooth refund process, we've established a clear
+                To ensure a smooth refund process, we&apos;ve established a clear
                 procedure:
               </p>
               <Timeline steps={refundSteps} />

@@ -10,6 +10,10 @@ import {
   Lock,
 } from "lucide-react";
 
+import Footer from "../../components/Footer/Footer";
+import Navbar from "../../components/Navbar/Navbar";
+import ParticlesComponent from "../../components/Particles/ParticlesBackground";
+
 
 const PaymentMethodCard = ({ selected, title, type, last4, expires, onClick }) => (
   <div
@@ -317,7 +321,7 @@ function Page() {
         </div>
       </main>
       <Footer />
-      <ParticlesContent/>
+      <ParticlesComponent/>
     </div>
   );
 }

@@ -97,7 +97,7 @@ function Page() {
           <div className="order-2 lg:order-1">
             <TermsSection icon={ScrollText} title="Agreement to Terms" id="agreement">
               <p>
-                By accessing or using NeonCloud's services, you agree to be bound by these Terms of Service 
+                By accessing or using NeonCloud&apos;s services, you agree to be bound by these Terms of Service 
                 and all applicable laws and regulations. If you do not agree with any of these terms, you 
                 are prohibited from using or accessing our services.
               </p>

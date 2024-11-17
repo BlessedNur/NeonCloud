@@ -29,7 +29,7 @@ const DashboardContent = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold mb-1">
-            Nur's Dashboard
+            Nur&apos;s Dashboard
           </h1>
           <p className="text-gray-400 text-sm">
             Last updated: {new Date().toLocaleString()}

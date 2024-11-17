@@ -160,7 +160,6 @@ const Page = () => {
   return (
     <>
       <div className="min-h-screen bg-black">
-        {/* Enhanced Gradient Background Effects */}
         <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_70%)]" />
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-purple-600/10 to-transparent rounded-full blur-3xl animate-pulse" />
@@ -172,7 +171,6 @@ const Page = () => {
 
         <main className="relative pt-12 sm:pt-24 pb-16">
           <Container>
-            {/* Hero Section */}
             <div className="text-center mb-16">
               <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
                 <TrustBadge icon={Shield} text="Enterprise Security" />
@@ -188,8 +186,7 @@ const Page = () => {
                 DNS, and world-class security.
               </p>
 
-              {/* Search Box */}
-              <div className="max-w-3xl mx-auto px-4">
+              <div className="max-w-3xl relative z-10 mx-auto px-4">
                 <form onSubmit={handleSearch} className="relative">
                   <div className="flex flex-col sm:flex-row gap-2">
                     <div className="relative flex-1 group">
@@ -214,7 +211,6 @@ const Page = () => {
                   </div>
                 </form>
 
-                {/* Popular Subdomains */}
                 <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm">
                   <span className="text-gray-400">Popular:</span>
                   {popularSubdomains.map((subdomain, index) => (
@@ -229,7 +225,6 @@ const Page = () => {
                 </div>
               </div>
 
-              {/* Search Results */}
               {isSearching && (
                 <div className="mt-8 flex justify-center">
                   <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
@@ -245,15 +240,13 @@ const Page = () => {
               )}
             </div>
 
-            {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24 px-4">
               <StatsCard value="99.99%" label="Uptime Guarantee" />
               <StatsCard value="<10ms" label="Global DNS Response" />
               <StatsCard value="24/7" label="Expert Support" />
             </div>
 
-            {/* Features Grid */}
-            <div className="relative px-4">
+            <div className="relative relative z-10 px-4">
               <h2 className="text-2xl sm:text-3xl font-bold text-center text-white mb-12">
                 Enterprise Features Included
               </h2>
@@ -277,7 +270,6 @@ const Page = () => {
               </div>
             </div>
 
-            {/* CTA Section */}
             {!currentUser && (
               <div className="mt-24 text-center px-4">
                 <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">

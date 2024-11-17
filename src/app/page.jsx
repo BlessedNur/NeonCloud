@@ -25,7 +25,7 @@ export default function Home() {
         <WhyChooseUs />
         <MigrationSection />
         <TestimonialCarousel />
-        <div className="relative mt-16">
+        <div className="relative z-10 mt-16">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_70%)]" />
 

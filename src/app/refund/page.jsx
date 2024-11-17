@@ -20,7 +20,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
 
 const PolicySection = ({ icon: Icon, title, children, id }) => (
-  <div className="mb-12" id={id}>
+  <div className="mb-12 z-10 relative"  id={id}>
     <div className="flex items-center gap-3 mb-4">
       <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,0.2)] to-purple-500/20 flex items-center justify-center">
         <Icon className="text-[rgba(207,8,140,1)]" size={20} />
@@ -120,7 +120,6 @@ function Page() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
-      {/* Hero Section */}
       <div className="relative py-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
         <div className="max-w-[1270px] mx-auto px-6 relative z-10">
@@ -133,10 +132,8 @@ function Page() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-[1270px] mx-auto px-6 pb-20">
+      <div className="max-w-[1270px] z-10 relative mx-auto px-6 pb-20">
         <div className="grid lg:grid-cols-[1fr_300px] gap-12">
-          {/* Main Content */}
           <div>
             <PolicySection icon={RefreshCcw} id="overview" title="Overview">
               <p>
@@ -315,7 +312,6 @@ function Page() {
             </PolicySection>
           </div>
 
-          {/* Sidebar */}
           <div style={sidebarStyle} className="space-y-6 hidden lg:block">
             <div className="p-6 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>

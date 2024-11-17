@@ -3,7 +3,7 @@ import { Search, Timer, Sparkles } from "lucide-react";
 
 const DomainOfferSection = () => {
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden z-[2]">
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 blur-3xl" />
 
       <div className="bg-white/5 backdrop-blur-xl mt-16 shadow-2xl relative">

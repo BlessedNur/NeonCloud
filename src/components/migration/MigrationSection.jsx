@@ -33,7 +33,7 @@ const MigrationSection = () => {
   ];
 
   return (
-    <div className="py-24 relative">
+    <div className="py-24 relative z-10">
       {/* Subtle gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent pointer-events-none" />
 

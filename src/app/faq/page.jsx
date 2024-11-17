@@ -155,7 +155,6 @@ function Page() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
-      {/* Hero Section */}
       <div className="relative py-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
         <div className="max-w-[1270px] mx-auto px-6 relative z-10">
@@ -168,7 +167,6 @@ function Page() {
               what you&apos;re looking for? Our support team is here to help 24/7.
             </p>
 
-            {/* Search Bar */}
             <div className="relative max-w-xl mx-auto">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -183,10 +181,8 @@ function Page() {
         </div>
       </div>
 
-      {/* FAQ Content */}
-      <div className="max-w-[1270px] mx-auto px-6 pb-20">
-        {/* Categories */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+      <div className="max-w-[1270px] z-10 relative mx-auto px-6 pb-20">
+        <div className="grid  grid-cols-2 md:grid-cols-5 gap-4 mb-12">
           {categories.map((category) => {
             const Icon = category.icon;
             return (
@@ -222,7 +218,6 @@ function Page() {
           })}
         </div>
 
-        {/* FAQ Accordions */}
         <div className=" mx-auto">
           {filteredFaqs?.length === 0 ? (
             <div className="text-center py-12">
@@ -240,7 +235,6 @@ function Page() {
           )}
         </div>
 
-        {/* Contact Support */}
         <div className="mt-20 text-center p-8 rounded-xl bg-gradient-to-b from-[rgba(207,8,140,0.1)] to-transparent border border-white/10">
           <h3 className="text-2xl font-semibold mb-4">Still have questions?</h3>
           <p className="text-gray-400 mb-6">

@@ -105,25 +105,22 @@ const PlanCard = ({
 
   return (
     <div
-      className={`relative w-full h-full flex flex-col  gap-8 ${
+      className={`z-[10] relative w-full h-full flex flex-col  gap-8 ${
         isHighlighted
           ? "bg-gradient-to-br from-purple-600 to-pink-600 shadow-xl scale-105"
           : "bg-gradient-to-br from-gray-900 to-gray-800"
       } p-8 pt-14 rounded-2xl transition-all duration-300 hover:transform hover:scale-[1.02] border border-gray-700`}
     >
-      {/* Tag Banner */}
       <div className="absolute -top-4 -right-2">
         <div className="relative">
           <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 px-6 py-2 rounded-l-full text-sm font-bold flex items-center gap-2 shadow-lg">
             <Sparkles className="w-4 h-4" />
             {tag}
           </div>
-          {/* Add decorative corner */}
           <div className="absolute top-full right-0 w-0 h-0 border-t-[8px] border-t-purple-800 border-r-[8px] border-r-transparent" />
         </div>
       </div>
 
-      {/* Enhanced Discount Banner */}
       {parseFloat(discount) > 0 && (
         <div className="absolute top-8 left-0 right-0">
           <div className="relative">
@@ -135,28 +132,25 @@ const PlanCard = ({
                   Save ${savings}
                 </span>
               </div>
-              {/* Animated Side Accents */}
               <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-white/30 animate-slide-right" />
                 <div className="absolute top-0 right-0 w-1 h-full bg-white/30 animate-slide-left" />
               </div>
             </div>
-            {/* Triangle corners */}
             <div className="absolute -left-2 top-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-yellow-600" />
             <div className="absolute -right-2 top-0 border-r-[8px] border-r-transparent border-t-[8px] border-t-red-600" />
           </div>
         </div>
       )}
 
-      {/* Rest of the card content remains the same */}
-      <div className="space-y-4 mt-8">
+      <div className="space-y-4 mt-8 z-[10]">
         <h3 className="text-2xl font-bold">{title}</h3>
         <div className="flex flex-col">
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               {discountedPrice}
             </span>
-            <span className="text-gray-400">
+            <span className="text-gray-400 z-[10]">
               {isMonthly ? period.monthly : period.yearly}
             </span>
           </div>
@@ -217,7 +211,7 @@ const Pricing = () => {
   const [isMonthly, setIsMonthly] = useState(true);
 
   return (
-    <div className="py-20" id="pricing">
+    <div className="py-20 relative z-[100]" id="pricing">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -228,7 +222,7 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="flex justify-center mb-16">
+        <div className="flex justify-center mb-16 z-50">
           <div className="bg-gray-800/50 p-1 rounded-xl inline-flex shadow-xl">
             <button
               className={`px-8 py-3 rounded-lg text-sm font-bold transition-all duration-200 ${

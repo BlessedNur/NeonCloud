@@ -32,7 +32,6 @@ import DashboardContent from "../../components/dashboardContent/DashboardContent
 import DomainsContent from "../../components/domainSection/DomainsSection";
 import WebHostingContent from "../../components/webhostingsection/WebHostingContent";
 import ProfileContent from "../../components/profile/ProfileContent";
-// SidebarItem component
 const SidebarItem = ({ icon, text, active, onClick }) => (
   <button
     onClick={onClick}
@@ -48,7 +47,7 @@ const SidebarItem = ({ icon, text, active, onClick }) => (
 );
 
 const SidebarSection = ({ title, children }) => (
-  <div className="py-2">
+  <div className="py-2 ">
     <h3 className="text-[11px] font-semibold text-gray-500 uppercase px-4 mb-1">
       {title}
     </h3>
@@ -274,7 +273,7 @@ function Page() {
   return (
     <>
       <section className="h-screen flex flex-col overflow-hidden">
-        <header className="bg-black/50 backdrop-blur-md border-b border-white/10 p-4 flex-shrink-0 relative z-30 ">
+        <header className="bg-black/5 backdrop-blur-[2px] border-b border-white/10 p-4 flex-shrink-0 relative z-30 ">
           <div className="flex items-center justify-between mx-auto">
             <div className="flex items-center gap-4">
               <button
@@ -299,13 +298,13 @@ function Page() {
         <div className="flex flex-1 text-white overflow-hidden">
           {isSidebarOpen && (
             <div
-              className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+              className="fixed inset-0 bg-black/5 z-50 lg:hidden"
               onClick={toggleSidebar}
             />
           )}
 
           <div
-            className={`fixed lg:static inset-y-0 z-[60] left-0 w-64 bg-black/50 backdrop-blur-md border-r border-white/5 flex flex-col overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+            className={`fixed lg:static inset-y-0 z-[60] left-0 w-64 bg-black/5 backdrop-blur-[2px] border-r border-white/5 flex flex-col overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >

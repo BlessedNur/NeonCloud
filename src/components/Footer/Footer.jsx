@@ -118,7 +118,7 @@ const Logo = ({ onclick }) => (
 function Footer() {
   const [currentUser, setCurrentUser] = useState(false);
   return (
-    <footer className="relative overflow-hidden pt-20 pb-10 text-white">
+    <footer className="relative z-10 overflow-hidden pt-20 pb-10 text-white">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
 
@@ -222,22 +222,10 @@ function Footer() {
               <span className="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></span>
             </h2>
             <ul className="space-y-3">
-              <FooterLink href="#">
+              <FooterLink href="/documentation">
                 <div className="flex items-center gap-2">
                   <Info className="w-4 h-4" />
                   Documentation
-                </div>
-              </FooterLink>
-              <FooterLink href="#">
-                <div className="flex items-center gap-2">
-                  <Wrench className="w-4 h-4" />
-                  API Reference
-                </div>
-              </FooterLink>
-              <FooterLink href="#">
-                <div className="flex items-center gap-2">
-                  <RefreshCw className="w-4 h-4" />
-                  Status Page
                 </div>
               </FooterLink>
             </ul>
@@ -250,19 +238,19 @@ function Footer() {
             <p>&copy; 2024 NeonCloud. All rights reserved.</p>
             <div className="flex gap-6">
               <a
-                href="#"
+                href="/privacy"
                 className="hover:text-white transition-colors duration-300"
               >
                 Privacy Policy
               </a>
               <a
-                href="#"
+                href="/refund"
                 className="hover:text-white transition-colors duration-300"
               >
                 Refund Policy
               </a>
               <a
-                href="#"
+                href="/terms"
                 className="hover:text-white transition-colors duration-300"
               >
                 Terms of Service

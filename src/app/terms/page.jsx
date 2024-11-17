@@ -21,7 +21,7 @@ import Footer from '../../components/Footer/Footer';
 import ParticlesComponent from '../../components/Particles/ParticlesBackground';
 
 const TermsSection = ({ icon: Icon, title, children, id }) => (
-  <div className="mb-12" id={id}>
+  <div className="mb-12 z-10 relative" id={id}>
     <div className="flex items-center gap-3 mb-4">
       <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,0.2)] to-purple-500/20 flex items-center justify-center">
         <Icon className="text-[rgba(207,8,140,1)]" size={20} />
@@ -75,7 +75,6 @@ function Page() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar/>
-      {/* Hero Section */}
       <div className="relative py-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
         <div className="max-w-[1270px] mx-auto px-6 relative z-10">
@@ -90,10 +89,8 @@ function Page() {
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="max-w-[1270px] mx-auto px-6 pb-20">
+      <div className="max-w-[1270px] z-10 relative mx-auto px-6 pb-20">
         <div className="grid lg:grid-cols-[1fr_300px] gap-12">
-          {/* Main Content */}
           <div className="order-2 lg:order-1">
             <TermsSection icon={ScrollText} title="Agreement to Terms" id="agreement">
               <p>
@@ -253,18 +250,17 @@ function Page() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <Mail className="text-[rgba(207,8,140,1)]" size={20} />
-                    <span>legal@neoncloud.com</span>
+                    <span>legal@neoncloud.io</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Globe className="text-[rgba(207,8,140,1)]" size={20} />
-                    <span>www.neoncloud.com/terms</span>
+                    <span>www.neoncloud.io/terms</span>
                   </div>
                 </div>
               </div>
             </TermsSection>
           </div>
 
-          {/* Sidebar */}
           <div className="order-1 lg:order-2">
             <TableOfContents sections={sections} />
           </div>

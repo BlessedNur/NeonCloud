@@ -13,6 +13,7 @@ import {
   Search,
   Clock,
   CheckCircle,
+  LogIn,
 } from "lucide-react";
 
 import Footer from "../../components/Footer/Footer";
@@ -69,7 +70,7 @@ const StatusIndicator = ({ status }) => {
 
 function Page() {
   const [selectedCategory, setSelectedCategory] = useState("general");
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const contactCategories = [
     {
       id: "general",
@@ -116,11 +117,139 @@ function Page() {
       link: "/docs/api",
     },
   ];
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <Navbar />
+        <div className="relative py-20">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
+          <div className="max-w-[1270px] mx-auto px-6 relative z-10">
+            <div className="max-w-2xl mx-auto text-center">
+              <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-[rgba(207,8,140,1)] via-purple-500 to-blue-500 bg-clip-text text-transparent">
+                Contact Support
+              </h1>
+              <p className="text-gray-400 mb-8">
+                Get the help you need. Check our knowledge base or contact our
+                support team.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-[1270px] relative z-10 mx-auto px-6 pb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-black/20 rounded-xl border border-white/10 p-8">
+              <h2 className="text-2xl font-semibold mb-6">Knowledge Base</h2>
+              <div className="space-y-4">
+                {/* <a href="/docs" className="block p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,0.2)] to-purple-500/20 flex items-center justify-center">
+                    <HelpCircle className="text-[rgba(207,8,140,1)]" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Documentation</h3>
+                    <p className="text-sm text-gray-400">Browse through our detailed guides and tutorials</p>
+                  </div>
+                </div>
+              </a> */}
+                <a
+                  href="/faq"
+                  className="block p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,0.2)] to-purple-500/20 flex items-center justify-center">
+                      <MessageCircle
+                        className="text-[rgba(207,8,140,1)]"
+                        size={20}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">FAQ</h3>
+                      <p className="text-sm text-gray-400">
+                        Find answers to commonly asked questions
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-black/20 rounded-xl border border-white/10 p-8">
+              <h2 className="text-2xl font-semibold mb-6">Customer Support</h2>
+              <div className="space-y-6">
+                <div className="bg-white/5 rounded-lg p-6">
+                  <h3 className="font-semibold mb-4">For Existing Customers</h3>
+                  <p className="text-gray-400 mb-4">
+                    Please log in to access our full support features including:
+                  </p>
+                  <ul className="space-y-2 text-gray-400 mb-6">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle
+                        size={16}
+                        className="text-[rgba(207,8,140,1)]"
+                      />
+                      24/7 Live Chat Support
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle
+                        size={16}
+                        className="text-[rgba(207,8,140,1)]"
+                      />
+                      Priority Ticket System
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle
+                        size={16}
+                        className="text-[rgba(207,8,140,1)]"
+                      />
+                      Technical Assistance
+                    </li>
+                  </ul>
+                  <button
+                    // onClick={() => setIsLoggedIn(true)}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 rounded-lg text-white font-semibold flex items-center justify-center"
+                  >
+                    <LogIn className="mr-2" size={20} />
+                    Log In to Contact Support
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-black/20 rounded-xl border border-white/10 p-8">
+            <h2 className="text-2xl font-semibold mb-6">
+              General Contact Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-4 bg-white/5 rounded-lg">
+                <Mail className="text-[rgba(207,8,140,1)] mb-4" size={24} />
+                <h3 className="font-semibold mb-2">Sales Inquiries</h3>
+                <p className="text-gray-400">sales@neoncloud.com</p>
+              </div>
+              <div className="p-4 bg-white/5 rounded-lg">
+                <Globe className="text-[rgba(207,8,140,1)] mb-4" size={24} />
+                <h3 className="font-semibold mb-2">Office Location</h3>
+                <p className="text-gray-400">San Francisco, CA</p>
+              </div>
+              <div className="p-4 bg-white/5 rounded-lg">
+                <Clock className="text-[rgba(207,8,140,1)] mb-4" size={24} />
+                <h3 className="font-semibold mb-2">Business Hours</h3>
+                <p className="text-gray-400">24/7 Support for Customers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+        <ParticlesComponent />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
-      <div className="relative py-20">
+      <div className="relative z-10 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
         <div className="max-w-[1270px] mx-auto px-6 relative z-10">
           <div className="max-w-2xl mx-auto text-center">
@@ -147,7 +276,7 @@ function Page() {
         </div>
       </div>
 
-      <div className="max-w-[1270px] mx-auto px-6 pb-20">
+      <div className="max-w-[1270px] relative z-10 mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {contactCategories.map((category) => (
             <ContactCard

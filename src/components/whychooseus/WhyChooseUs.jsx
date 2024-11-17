@@ -59,7 +59,7 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <div className="whychooseus py-24">
+    <div className="whychooseus py-24 relative z-10">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header Section */}
         <div className="text-center space-y-6 mb-20">

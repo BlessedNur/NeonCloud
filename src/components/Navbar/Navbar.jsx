@@ -26,15 +26,14 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const Logo = ({ onclick }) => (
   <div className="flex cursor-pointer items-center" onClick={onclick}>
     <div className="relative flex items-center">
-      {/* Stylized lightning bolt mark */}
       <div className="relative w-8 h-8 mr-3">
         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 rounded-lg opacity-80"></div>
         <div className="absolute inset-[2px] bg-black/40 backdrop-blur-sm rounded-lg"></div>
-        {/* Lightning Bolt SVG */}
         <svg
           viewBox="0 0 24 24"
           className="absolute inset-0 w-full h-full p-2"
@@ -61,11 +60,9 @@ const Logo = ({ onclick }) => (
             </linearGradient>
           </defs>
         </svg>
-        {/* Glow effect */}
         <div className="absolute inset-0 bg-[rgba(207,8,140,0.2)] rounded-lg blur-md"></div>
       </div>
 
-      {/* Text part */}
       <div className="flex flex-col">
         <div className="relative">
           <span
@@ -160,7 +157,6 @@ function Navbar() {
 
   return (
     <div className="max-w-[1270px] m-auto z-50 px-4 flex-col flex gap-5 relative">
-      {/* Top Bar */}
       {path === "/" && (
         <div className="text-gray-300 py-2 font-light flex gap-5 justify-between max-md:hidden">
           <div className="flex gap-8">
@@ -186,7 +182,6 @@ function Navbar() {
         </div>
       )}
 
-      {/* Main Navbar */}
       <div
         className={`flex justify-between items-center p-5 bg-black/50 backdrop-blur-md rounded-lg text-gray-100 border ${
           path !== "/" && "mt-8"
@@ -194,7 +189,6 @@ function Navbar() {
       >
         <Logo onclick={() => router.push("/")} />
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
@@ -204,7 +198,6 @@ function Navbar() {
           </button>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           <Link
             href="/domain"
@@ -261,11 +254,7 @@ function Navbar() {
           </Link>
         </nav>
 
-        {/* Right Section */}
         <div className="hidden md:flex items-center gap-6">
-          {/* <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-            <Search size={20} />
-          </button> */}
           <div className="relative group">
             <button className="p-2 hover:bg-white/10 rounded-lg transition-colors flex items-center gap-1">
               <Globe size={20} />
@@ -347,7 +336,6 @@ function Navbar() {
         />
       )}
 
-      {/* Mobile Menu Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
@@ -355,14 +343,12 @@ function Navbar() {
         />
       )}
 
-      {/* Mobile Menu */}
       <div
         className={`fixed top-0 right-0 w-[80%] max-w-sm h-full bg-gray-900 z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="h-full flex flex-col">
-          {/* Mobile Header */}
           <div className="p-4 border-b border-white/10 flex items-center justify-between">
             {isLoggedIn ? (
               <div className="flex items-center gap-2">
@@ -380,7 +366,6 @@ function Navbar() {
             </button>
           </div>
 
-          {/* Mobile Search */}
           <div className="p-4">
             <div className="relative">
               <input
@@ -395,7 +380,6 @@ function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Navigation */}
           <nav className="flex-1 overflow-y-auto py-4">
             <Link
               href="/domain"
@@ -451,7 +435,6 @@ function Navbar() {
             ))}
           </nav>
 
-          {/* Mobile Footer */}
           <div className="p-4 border-t border-white/10">
             {isLoggedIn ? (
               <button

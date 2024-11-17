@@ -189,19 +189,19 @@ function Footer() {
               <span className="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></span>
             </h2>
             <ul className="space-y-3">
-              <FooterLink href={currentUser ? "/dashboard" : "/register"}>
+              <FooterLink href={currentUser ? "/dashboard" : "/signin"}>
                 <div className="flex items-center gap-2">
                   <Server className="w-4 h-4" />
                   Web Hosting
                 </div>
               </FooterLink>
-              <FooterLink href={currentUser ? "/dashboard" : "/register"}>
+              <FooterLink href={currentUser ? "/dashboard" : "/signin"}>
                 <div className="flex items-center gap-2">
                   <Cloud className="w-4 h-4" />
                   Cloud Servers
                 </div>
               </FooterLink>
-              <FooterLink href={currentUser ? "/dashboard" : "/register"}>
+              <FooterLink href={currentUser ? "/dashboard" : "/signin"}>
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4" />
                   SSL Certificates

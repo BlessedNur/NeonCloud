@@ -12,6 +12,10 @@
 :root {
   --neon-primary: rgb(207, 8, 140);
   --neon-error: rgb(255, 0, 0);
+  --toast-success: rgba(207, 8, 140, 1);
+  --toast-error: #ef4444;
+  --toast-border: 1px solid rgba(207, 8, 140, 0.3);
+  --toast-background: black;
 }
 html {
   scroll-behavior: smooth;
@@ -35,7 +39,6 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
-
 @keyframes bounce {
   0%,
   80%,
@@ -47,12 +50,9 @@ body {
   }
 }
 
-.neoncloud-toast {
-  font-family: 'Poppins', sans-serif;
-}
-
 /* Neon glow animation for toasts */
 .neoncloud-toast {
+  font-family: "Poppins", sans-serif !important;
   animation: neonPulse 1.5s ease-in-out infinite alternate;
 }
 
@@ -63,4 +63,57 @@ body {
   to {
     box-shadow: 0 0 20px rgba(207, 8, 140, 0.4);
   }
+}
+
+/* Base toast styles */
+.neoncloud-toast {
+  font-family: var(--font-poppins), system-ui, sans-serif !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* Success toast */
+.neoncloud-toast[data-type="success"] {
+  border: 1px solid rgba(207, 8, 140, 0.3) !important;
+  box-shadow: 0 0 10px rgba(207, 8, 140, 0.2) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500 !important;
+}
+
+/* Error toast */
+.neoncloud-toast[data-type="error"] {
+  border: 1px solid rgba(255, 0, 0, 0.3) !important;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.2) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500 !important;
+}
+
+/* Loading toast */
+.neoncloud-toast[data-type="loading"] {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 0 10px rgba(207, 8, 140, 0.1) !important;
+  color: white !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500 !important;
+}
+
+/* Description text styling */
+.neoncloud-toast [data-description] {
+  color: #9ca3af !important; /* gray-400 */
+  font-size: 0.875rem !important;
+  margin-top: 0.25rem !important;
+  font-weight: 400 !important;
+}
+
+/* Close button styling */
+.neoncloud-toast button[data-close-button] {
+  color: #6b7280 !important; /* gray-500 */
+  opacity: 0.8 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.neoncloud-toast button[data-close-button]:hover {
+  opacity: 1 !important;
+  color: #9ca3af !important; /* gray-400 */
 }

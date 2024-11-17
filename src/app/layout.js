@@ -52,42 +52,13 @@ export default function RootLayout({ children }) {
         {children}
         <Toaster
           position="top-right"
+          theme="dark"
           toastOptions={{
             style: {
               background: "black",
-              color: "white",
               border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "8px",
-              padding: "12px",
-              boxShadow: "0 0 10px rgba(207, 8, 140, 0.2)",
             },
             className: "neoncloud-toast",
-            success: {
-              style: {
-                background: "black",
-                color: "white",
-                border: "1px solid rgba(207, 8, 140, 0.3)",
-                boxShadow: "0 0 10px rgba(207, 8, 140, 0.2)",
-              },
-              icon: "✓",
-            },
-            error: {
-              style: {
-                background: "black",
-                color: "white",
-                border: "1px solid rgba(255, 0, 0, 0.3)",
-                boxShadow: "0 0 10px rgba(255, 0, 0, 0.2)",
-              },
-              icon: "✕",
-            },
-            loading: {
-              style: {
-                background: "black",
-                color: "white",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow: "0 0 10px rgba(207, 8, 140, 0.1)",
-              },
-            },
           }}
         />
       </body>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import {
   Mail,
@@ -327,12 +327,15 @@ function Navbar() {
               </div>
             </div>
           ) : (
-            <button
+            <span
               onClick={() => router.push("/signin")}
-              className="bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 px-6 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              className="relative cursor-pointer group inline-block"
             >
-              Login
-            </button>
+              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r  from-[rgba(207,8,140,1)] to-purple-500 transition-all duration-300">
+                Login
+              </span>
+              <span className="absolute bottom-[-2px] left-0 w-full h-[2px] bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 opacity-80" />
+            </span>
           )}
         </div>
       </div>

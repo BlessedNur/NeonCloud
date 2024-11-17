@@ -30,36 +30,44 @@ function Banner() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
-            <button className="bg-[rgb(207,8,140)] px-8 py-4 rounded-lg hover:bg-[rgb(187,7,126)] transition-colors duration-300 flex items-center justify-center gap-2 group">
-              Get Started
+            {/* Primary button matching the provided gradient */}
+            <button className="bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 group shadow-[0_0_15px_rgba(207,8,140,0.3)]">
+              <span className="font-medium">Get Started</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
-            <button className="px-8 py-4 rounded-lg border border-[rgb(207,8,140)] hover:bg-[rgb(207,8,140)]/10 transition-colors duration-300">
+
+            {/* Secondary button with complementary styling */}
+            <button className="px-6 py-3 rounded-lg border border-[rgba(207,8,140,0.3)] hover:bg-[rgba(207,8,140,0.1)] transition-all duration-300 shadow-[0_0_15px_rgba(207,8,140,0.1)]">
               Learn More
             </button>
           </div>
 
+          {/* Feature badges with matching theme */}
           <div className="flex flex-wrap gap-4 mt-4">
-            <span className="px-4 py-2 rounded-full bg-[rgb(207,8,140)]/10 border border-[rgb(207,8,140)]/20 text-sm">
-              24/7 Support
-            </span>
-            <span className="px-4 py-2 rounded-full bg-[rgb(207,8,140)]/10 border border-[rgb(207,8,140)]/20 text-sm">
-              99.9% Uptime
-            </span>
-            <span className="px-4 py-2 rounded-full bg-[rgb(207,8,140)]/10 border border-[rgb(207,8,140)]/20 text-sm">
-              Free SSL Certificate
-            </span>
+            {["24/7 Support", "99.9% Uptime", "Free SSL Certificate"].map(
+              (feature, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm border border-[rgba(207,8,140,0.2)] text-sm font-medium hover:border-[rgba(207,8,140,0.4)] transition-colors duration-300"
+                >
+                  {feature}
+                </span>
+              )
+            )}
           </div>
         </div>
 
         <div className="hidden lg:block w-1/2">
-          <Image
-            width={1000}
-            height={1000}
-            src="/images/Banner 1.png"
-            className="w-full h-auto object-cover rounded-2xl shadow-2xl"
-            alt="Background Banner"
-          />
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r rounded-full from-[rgba(207,8,141,0.04)] to-purple-500/20 blur-2xl" />
+            <Image
+              width={1000}
+              height={1000}
+              src="/images/Banner 1.png"
+              className="relative w-full h-auto object-cover rounded-2xl  border-[rgba(207,8,140,0.2)]"
+              alt="Background Banner"
+            />
+          </div>
         </div>
       </div>
     </div>

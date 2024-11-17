@@ -1,16 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Users,
-  Target,
-  Award,
-  Shield,
-  Globe,
-  Cloud,
-  Server,
-  Zap,
-  CheckCircle,
-} from "lucide-react";
+import { Shield, Globe, Zap, CheckCircle } from "lucide-react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
@@ -69,9 +59,9 @@ function Page() {
               Powering the Future of Cloud Computing
             </h1>
             <p className="text-xl text-gray-400">
-              At NeonCloud, we&apos;re revolutionizing how businesses harness the
-              power of cloud technology. Our mission is to make enterprise-grade
-              cloud solutions accessible to everyone.
+              At NeonCloud, we&apos;re revolutionizing how businesses harness
+              the power of cloud technology. Our mission is to make
+              enterprise-grade cloud solutions accessible to everyone.
             </p>
           </div>
 
@@ -191,19 +181,19 @@ function Page() {
 
       {/* Call to Action */}
       {!currentUser && (
-              <div className="mt-24 text-center px-4">
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
-                  Ready to Get Started?
-                </h2>
-                <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                  Join thousands of developers and businesses who trust
-                  NeonCloud for their hosting needs.
-                </p>
-                <button className="px-8 py-3 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 text-white font-medium hover:opacity-90 transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40">
-                  Create Your Free Account
-                </button>
-              </div>
-            )}
+        <div className="mt-24 text-center px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+            Ready to Get Started?
+          </h2>
+          <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+            Join thousands of developers and businesses who trust NeonCloud for
+            their hosting needs.
+          </p>
+          <button className="px-8 py-3 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 text-white font-medium hover:opacity-90 transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40">
+            Create Your Free Account
+          </button>
+        </div>
+      )}
       <Footer />
       <ParticlesComponent />
     </div>

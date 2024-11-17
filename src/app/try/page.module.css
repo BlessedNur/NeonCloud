@@ -1,0 +1,388 @@
+/* Desktop styles (1025px and wider) */
+@media screen and (min-width: 1025px) {
+  .full {
+    display: flex;
+  }
+  
+  .sidebar{
+    height: 100vh;
+    flex: 1;
+
+  }
+  .content {
+    height: 100vh;
+    overflow-y: scroll;
+  }
+
+  .main {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #f4f4f9;
+    padding: 20px;
+  }
+
+  .main h1{
+    color: #007bff84;
+  }
+
+  .topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    width: 100%;
+    height: 60px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .left {
+    padding-left: 10px;
+  }
+
+  .left input {
+    padding: 5px 15px;
+  }
+
+  .right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .profile img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 3em;
+  }
+
+  .nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #C4CDD5;
+    padding-bottom: 10px;
+  }
+
+  .btn2 {
+    background-color:  #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .emailsection, .passwordsection, .deletesection {
+    background-color: #fff;
+    width: 75%;
+    padding: 15px;
+    margin-top: 2em;
+    margin-bottom: 20px;
+    margin-left: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #637381;
+  }
+
+  .emailsection h2, .passwordsection h2, .deletesection h2 {
+    color:  #007BFF;
+  }
+
+  .emailsection h4, .passwordsection h4 {
+    color:  #007bff84;
+  }
+
+  .separate {
+    display: flex;
+    align-items: center;
+    gap: 6em;
+  }
+
+  .separate2 {
+    display: flex;
+    align-items: center;
+    gap: 8em;
+  }
+
+  .separate3 {
+    display: flex;
+    align-items: center;
+    gap: 4em;
+  }
+
+  .email {
+    color:  #007BFF;
+  }
+
+  .inputs {
+    width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border 0.3s;
+  }
+
+  .inputs::placeholder {
+    color: #999;
+    opacity: 0.7;
+  }
+
+  .inputs:focus {
+    border-color:  #007BFF;
+  }
+
+  .btn {
+    background-color:  #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .btn1 {
+    background-color:  #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+    margin-left: 19em;
+  }
+
+  .btn:hover {
+    background-color: #007bff84;
+  }
+
+  .passwordrequirements {
+    padding-left: 15em;
+  }
+
+  .passwordrequirements ul {
+    padding-left: 2em;
+  }
+
+  .deletesection h2 {
+    color: #DC3545;
+  }
+
+  .deletesection .para {
+    border-bottom: 1px solid #F4F6F8;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 12px;
+    color: #637381;
+    padding-bottom: 10px;
+  }
+
+  .deletesection p {
+    padding-top: 1em;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #637381;
+  }
+
+  .deletesection .btn {
+    width: 139px;
+    height: 42px;
+    top: 1220px;
+    left: 540px;
+    gap: 0px;
+    opacity: 0px;
+    background-color: #DC3545;
+    border-radius: 10px;
+  }
+
+  .deletesection .email {
+    color: blueviolet;
+  }
+}
+
+/* ==========================  Phone styles (up to 600px) =========================== */
+@media (max-width: 600px) {
+  .full {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  .main {
+    font-family: 'Syne', sans-serif;
+    color: #333;
+    background-color: #f4f4f9;
+    padding: 10px;
+    height: auto;
+    overflow-y: auto;
+  }
+  .main h1{
+    color: #007bff84;
+  }
+  .topnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    width: 100%;
+    height: 60px;
+    padding: 0 10px;
+  }
+
+  .left {
+    width: 100%;
+    padding-left: 10px;
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 20px; 
+  }
+
+  .profile img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .hamburgerMenu {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+
+  .hamburgerMenu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 4px 0;
+    background-color: #333;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 75%;
+    height: 100%;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .nav ul {
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  .nav ul li {
+    padding: 10px 0;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid #C4CDD5;
+  }
+
+  .btn2 {
+    background-color:  #007BFF; 
+    border: none;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .btn{
+    background-color:  #007BFF; 
+    color: white;
+    border: none;
+    padding: 1em;
+    border-radius: 10px;
+
+  }
+  .emailsection, .passwordsection, .deletesection {
+    background-color: #fff;
+    color: #637381; 
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+
+  .emailsection h2, .passwordsection h2 {
+    color: #007bff84; 
+  }
+
+  .emailsection h4, .passwordsection h4 {
+    color: #007bff84; 
+  }
+
+  .inputs {
+    width: 100%;
+    padding: 10px; 
+    margin: 10px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    box-sizing: border-box;
+    outline: none;
+    transition: border 0.3s;
+  }
+
+  .inputs::placeholder {
+    color: #999;
+    opacity: 0.7;
+  }
+
+  .inputs:focus {
+    border-color:  #007BFF;  
+  }
+
+  .btn1 {
+    background-color:  #007BFF; 
+    border: none;
+    color: #fff; 
+    padding: 1em;
+    border-radius: 10px;
+  }
+
+  .passwordrequirements {
+    padding-left: 0;
+  }
+
+  .passwordrequirements ul {
+    padding-left: 0;
+  }
+  
+  .email{
+    color: blueviolet;
+  }
+  .deletesection h2{
+    color: #DC3545;
+  }
+  .deletesection .btn {
+    width: 100%;
+    background-color: #DC3545;
+    color: #fff;
+    border: none;
+  }
+}

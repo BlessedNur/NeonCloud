@@ -28,7 +28,7 @@ const StatusMessage = ({ type, message }) => {
 
 const Logo = ({ onclick }) => (
   <div
-    className="fixed top-7 left-7 flex cursor-pointer items-center"
+    className="fixed top-7 left-7 flex cursor-pointer items-center z-10"
     onClick={onclick}
   >
     <div className="relative flex items-center">
@@ -126,7 +126,7 @@ const InputField = ({
 );
 
 function Page() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -170,7 +170,6 @@ function Page() {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -191,8 +190,8 @@ function Page() {
               Reset Your Password
             </h1>
             <p className="text-gray-400">
-              Enter your email address and we&apos;ll send you instructions to reset
-              your password.
+              Enter your email address and we&apos;ll send you instructions to
+              reset your password.
             </p>
           </div>
 

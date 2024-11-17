@@ -67,7 +67,7 @@ const OTPInput = ({ value, onChange, isDisabled }) => {
 
 const Logo = ({ onclick }) => (
   <div
-    className="fixed top-7 left-7 flex cursor-pointer items-center"
+    className="fixed top-7 left-7 flex cursor-pointer items-center z-10"
     onClick={onclick}
   >
     <div className="relative flex items-center">
@@ -142,14 +142,14 @@ const Logo = ({ onclick }) => (
 );
 
 function Page() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [otp, setOTP] = useState(Array(TOTAL_DIGITS).fill(""));
   const [timer, setTimer] = useState(RESEND_TIMEOUT);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState("");
   const [verificationStatus, setVerificationStatus] = useState(null);
-  const [phone] = useState("+1 (* * *) * * *-4567"); 
+  const [phone] = useState("+1 (* * *) * * *-4567");
 
   useEffect(() => {
     let interval;

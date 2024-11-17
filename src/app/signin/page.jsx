@@ -67,9 +67,9 @@ const InputField = ({
   </div>
 );
 
-const Logo = ({onclick}) => (
+const Logo = ({ onclick }) => (
   <div
-    className="fixed top-7 left-7 flex cursor-pointer items-center"
+    className="fixed top-7 left-7 flex cursor-pointer items-center z-10"
     onClick={onclick}
   >
     <div className="relative flex items-center">
@@ -140,7 +140,7 @@ const Logo = ({onclick}) => (
 );
 
 function Page() {
-  const router = useRouter()
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -202,7 +202,7 @@ function Page() {
 
   return (
     <>
-      <Logo  onclick={()=>router.push("/")}/>
+      <Logo onclick={() => router.push("/")} />
       <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
           <div className="text-center mb-8">

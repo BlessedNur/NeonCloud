@@ -99,7 +99,7 @@ const StateDisplay = ({ state, email, error, onResend }) => {
 };
 const Logo = ({ onclick }) => (
   <div
-    className="fixed top-7 left-7 flex cursor-pointer items-center"
+    className="fixed top-7 left-7 flex cursor-pointer items-center z-10"
     onClick={onclick}
   >
     <div className="relative flex items-center">
@@ -170,7 +170,7 @@ const Logo = ({ onclick }) => (
 );
 
 function Page() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [verificationState, setVerificationState] = useState(
     VerificationState.VERIFYING

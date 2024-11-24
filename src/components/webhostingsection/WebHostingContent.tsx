@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import {
@@ -50,9 +50,10 @@ const isAllowedFileType = (file) => {
   const normalizedPath = file.path ? path.normalize(file.path) : "";
 
   if (normalizedPath) {
-    const isIgnoredPath = ignoredPaths.some((ignoredPath) =>
-      normalizedPath.includes(path.sep + ignoredPath + path.sep) || 
-      normalizedPath.endsWith(path.sep + ignoredPath) 
+    const isIgnoredPath = ignoredPaths.some(
+      (ignoredPath) =>
+        normalizedPath.includes(path.sep + ignoredPath + path.sep) ||
+        normalizedPath.endsWith(path.sep + ignoredPath)
     );
     if (isIgnoredPath) return false;
   }
@@ -117,26 +118,32 @@ const isAllowedFileType = (file) => {
   return allowedTypes.includes(file.type);
 };
 
+const isDirectoryEntry = (
+  entry: FileSystemEntry
+): entry is FileSystemDirectoryEntry => {
+  return (entry as FileSystemDirectoryEntry).isDirectory !== undefined;
+};
 
-const processDirectory = async (entry) => {
-  const files = [];
+const processDirectory = async (entry: FileSystemDirectoryEntry) => {
+  const files: { file: File; path: string }[] = [];
 
-  async function readEntries(dirReader) {
-    const entries = await new Promise((resolve) => {
+  async function readEntries(dirReader: FileSystemDirectoryReader) {
+    const entries: FileSystemEntry[] = await new Promise((resolve) => {
       dirReader.readEntries(resolve);
     });
 
     for (let entry of entries) {
-      if (entry.isFile) {
-        const file = await new Promise((resolve) => {
-          entry.file(resolve);
+      if ((entry as FileSystemFileEntry).isFile) {
+        const fileEntry = entry as FileSystemFileEntry; // Type assertion
+        const file = await new Promise<File>((resolve) => {
+          fileEntry.file(resolve);
         });
         files.push({
           file,
           path: entry.fullPath,
         });
-      } else if (entry.isDirectory) {
-        await readEntries(entry.createReader());
+      } else if (isDirectoryEntry(entry)) {
+        await readEntries(entry.createReader()); // Safe to call createReader now
       }
     }
   }
@@ -216,8 +223,8 @@ const WebHostingContent = () => {
     }
   }, [uploadedFiles, selectedDomain]);
 
-  const simulateUpload = (files) => {
-    files.forEach((file) => {
+  const simulateUpload = (files: any) => {
+    files.forEach((file: any) => {
       // Skip files that already have error status
       if (file.status === "error") return;
 
@@ -249,7 +256,7 @@ const WebHostingContent = () => {
     });
   };
 
-  const handleFiles = async (items) => {
+  const handleFiles = async (items: any) => {
     try {
       const allFiles = [];
 
@@ -267,7 +274,8 @@ const WebHostingContent = () => {
         }
         // Handle regular File objects (file input)
         else if (item instanceof File) {
-          allFiles.push({ file: item, path: `/${item.name}` });
+          const fileItem = item as File;
+          allFiles.push({ file: fileItem, path: `/${fileItem.name}` });
         }
       }
 
@@ -862,10 +870,11 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
 
   // Handle subdomain input
   const handleSubdomainChange = (e) => {
-    const value = e.target.value.toLowerCase()
-      .replace(/[^a-z0-9-]/g, '') // Only allow lowercase letters, numbers, and hyphens
-      .replace(/^-+|-+$/g, ''); // Remove hyphens from start and end
-    
+    const value = e.target.value
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "") // Only allow lowercase letters, numbers, and hyphens
+      .replace(/^-+|-+$/g, ""); // Remove hyphens from start and end
+
     setSubdomain(value);
     setSelectedDomain(value ? `${value}.${baseDomain}` : "");
   };
@@ -882,9 +891,7 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium mb-2">
-              Subdomain
-            </label>
+            <label className="block text-sm font-medium mb-2">Subdomain</label>
             <div className="relative">
               <input
                 type="text"
@@ -899,7 +906,8 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
             </div>
             {subdomain && !isValidSubdomain(subdomain) && (
               <p className="text-red-400 text-sm mt-1">
-                Subdomain can only contain lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen
+                Subdomain can only contain lowercase letters, numbers, and
+                hyphens, and cannot start or end with a hyphen
               </p>
             )}
             {subdomain && isValidSubdomain(subdomain) && (
@@ -934,7 +942,6 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
     </div>
   );
 };
-
 
 const HostingPlans = ({ selectedPlan, setSelectedPlan }) => (
   <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">

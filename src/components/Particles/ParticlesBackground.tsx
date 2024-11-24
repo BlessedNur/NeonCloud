@@ -3,6 +3,12 @@ import React from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { loadSlim } from "@tsparticles/slim";
+import type {
+  ISourceOptions,
+  RecursivePartial,
+  MoveDirection,
+  OutMode,
+} from "@tsparticles/engine";
 
 const ParticlesComponent = () => {
   const [init, setInit] = useState(false);
@@ -17,7 +23,7 @@ const ParticlesComponent = () => {
 
   const particlesLoaded = useCallback(async (container) => {}, []);
 
-  const options = useMemo(
+  const options: RecursivePartial<ISourceOptions> = useMemo(
     () => ({
       autoPlay: true,
       background: {
@@ -32,15 +38,15 @@ const ParticlesComponent = () => {
       },
       fpsLimit: 120,
       interactivity: {
-        detectsOn: "canvas",
+        detectsOn: "canvas" as const,
         events: {
           onClick: {
             enable: true,
-            mode: "push",
+            mode: "push" as const,
           },
           onHover: {
             enable: false,
-            mode: "",
+            mode: "repulse" as const,
             parallax: {
               enable: true,
               force: 60,
@@ -99,15 +105,15 @@ const ParticlesComponent = () => {
         move: {
           enable: true,
           speed: { min: 0.2, max: 0.8 },
-          direction: "none",
+          direction: "none" as MoveDirection,
           random: true,
           straight: false,
           outModes: {
-            default: "out",
-            bottom: "out",
-            left: "out",
-            right: "out",
-            top: "out",
+            default: "out" as OutMode,
+            bottom: "out" as OutMode,
+            left: "out" as OutMode,
+            right: "out" as OutMode,
+            top: "out" as OutMode,
           },
           attract: {
             enable: false,
@@ -124,8 +130,10 @@ const ParticlesComponent = () => {
             area: 800,
             factor: 1000,
           },
-          limit: 0,
-          value: 120, // Increased from 80
+          limit: {
+            value: 0,
+          },
+          value: 120,
         },
         opacity: {
           random: {
@@ -143,7 +151,7 @@ const ParticlesComponent = () => {
           },
         },
         shape: {
-          type: ["circle", "triangle"],
+          type: ["circle", "triangle"] as const,
           options: {
             triangle: {
               sides: 3,
@@ -185,6 +193,7 @@ const ParticlesComponent = () => {
     }),
     []
   );
+
   return (
     <div
       className="fixed inset-0"

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import {
@@ -29,6 +28,53 @@ import {
   Bell,
   X,
 } from "lucide-react";
+
+type UserData = {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  role: string;
+  avatar: any | null;
+  location: string;
+  timezone: string;
+  joinDate: string;
+  lastActive: string;
+  bio: string;
+  skills: string[];
+  languages: string[];
+  socialLinks: {
+    github: string;
+    linkedin: string;
+    twitter: string;
+  };
+  security: {
+    lastPasswordChange: string;
+    recoveryEmail: string;
+    activeDevices: string[];
+    twoFactorEnabled: boolean;
+    loginHistory: Array<{
+      date: string;
+      device: string;
+      location: string;
+      status: string;
+    }>;
+  };
+  billing: {
+    nextBillingDate: string;
+    paymentMethods: Array<{
+      lastFour: string;
+      expiryDate: string;
+      isDefault: boolean;
+    }>;
+    history: Array<{
+      date: string;
+      description: string;
+      amount: string;
+      status: string;
+    }>;
+  };
+};
 
 const ProfileContent = () => {
   // Base States
@@ -62,7 +108,7 @@ const ProfileContent = () => {
 
   // Main User Data State
 
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     name: "Alex Johnson",
     email: "alex.johnson@example.com",
     phone: "+1 (555) 123-4567",
@@ -82,6 +128,8 @@ const ProfileContent = () => {
       twitter: "@alexjohnson",
     },
     security: {
+      recoveryEmail: "",
+      activeDevices: [],
       lastPasswordChange: "October 15, 2024",
       twoFactorEnabled: true,
       loginHistory: [
@@ -403,6 +451,12 @@ const ProfileContent = () => {
     </Modal>
   );
 
+  interface SecurityTabProps {
+    userData: UserData; 
+    showPasswordModal: boolean;
+    setShowPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+
   const UpgradePlanModal = ({ isOpen, onClose }) => (
     <Modal isOpen={isOpen} onClose={onClose} title="Upgrade Plan">
       <div className="space-y-6">
@@ -702,92 +756,6 @@ const ProfileContent = () => {
             rows={4}
             className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 disabled:opacity-50"
           />
-        </section>
-
-        {/* Skills & Languages Section */}
-        <section className="space-y-4">
-          <h3 className="text-lg font-medium">Skills & Languages</h3>
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">Skills</label>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {editedData.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-[rgba(207,8,140,0.2)] text-[rgba(207,8,140,1)] rounded-full text-sm flex items-center gap-2"
-                  >
-                    {skill}
-                    {isEditing && (
-                      <button
-                        onClick={() => handleRemoveSkill(skill)}
-                        className="hover:text-white"
-                      >
-                        <X size={14} />
-                      </button>
-                    )}
-                  </span>
-                ))}
-              </div>
-              {isEditing && (
-                <form onSubmit={handleAddSkill} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newSkill}
-                    onChange={(e) => setNewSkill(e.target.value)}
-                    placeholder="Add a skill"
-                    className="flex-1 bg-black/30 border border-white/10 rounded-lg px-3 py-2"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-[rgba(207,8,140,1)] hover:bg-[rgba(207,8,140,0.8)] rounded-lg"
-                  >
-                    Add
-                  </button>
-                </form>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                Languages
-              </label>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {editedData.languages.map((language, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-black/30 border border-white/10 rounded-full text-sm flex items-center gap-2"
-                  >
-                    {language}
-                    {isEditing && (
-                      <button
-                        onClick={() => handleRemoveLanguage(language)}
-                        className="hover:text-white"
-                      >
-                        <X size={14} />
-                      </button>
-                    )}
-                  </span>
-                ))}
-              </div>
-              {isEditing && (
-                <form onSubmit={handleAddLanguage} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newLanguage}
-                    onChange={(e) => setNewLanguage(e.target.value)}
-                    placeholder="Add a language"
-                    className="flex-1 bg-black/30 border border-white/10 rounded-lg px-3 py-2"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-[rgba(207,8,140,1)] hover:bg-[rgba(207,8,140,0.8)] rounded-lg"
-                  >
-                    Add
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
         </section>
 
         {/* Account Management Section */}

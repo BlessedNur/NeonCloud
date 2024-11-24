@@ -9,15 +9,21 @@ const TOTAL_DIGITS = 6;
 const RESEND_TIMEOUT = 30; // seconds
 
 const OTPInput = ({ value, onChange, isDisabled }) => {
-  const inputRefs = useRef([]);
+  const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  const handleKeyDown = (e, index) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.key === "Backspace" && !value[index] && index > 0) {
       inputRefs.current[index - 1].focus();
     }
   };
 
-  const handleChange = (e, index) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const newValue = e.target.value;
     if (newValue.match(/^[0-9]$/)) {
       const newOTP = [...value];
@@ -49,7 +55,9 @@ const OTPInput = ({ value, onChange, isDisabled }) => {
         .map((_, index) => (
           <input
             key={index}
-            ref={(ref) => (inputRefs.current[index] = ref)}
+            ref={(ref) => {
+              inputRefs.current[index] = ref!;
+            }}
             type="text"
             inputMode="numeric"
             maxLength={1}

@@ -1,9 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, Github, Chrome } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  Github,
+  Chrome,
+  LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const SocialButton = ({ icon: Icon, label, onClick, variant }) => {
   const getVariantStyles = () => {
@@ -28,7 +37,21 @@ const SocialButton = ({ icon: Icon, label, onClick, variant }) => {
   );
 };
 
+type InputFieldProps = {
+  name: string;
+  icon: LucideIcon;
+  type: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  showPasswordToggle?: boolean;
+  onTogglePassword?: () => void;
+  showPassword?: boolean;
+};
+
 const InputField = ({
+  name,
   icon: Icon,
   type,
   placeholder,
@@ -38,13 +61,14 @@ const InputField = ({
   showPasswordToggle,
   onTogglePassword,
   showPassword,
-}) => (
+}: InputFieldProps) => (
   <div className="space-y-2">
     <div className="relative">
       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
         <Icon size={20} />
       </div>
       <input
+        name={name}
         type={showPasswordToggle ? (showPassword ? "text" : "password") : type}
         className={`w-full bg-white/5 border ${
           error ? "border-red-500" : "border-white/10"
@@ -139,33 +163,27 @@ const Logo = ({ onclick }) => (
   </div>
 );
 
+type FormData = {
+  email: string;
+  password: string;
+};
+type FormErrors = {
+  email?: string;
+  password?: string;
+};
+
 function Page() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
-
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: FormErrors = {};
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -178,8 +196,22 @@ function Page() {
     }
     return newErrors;
   };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-  const handleSubmit = async (e) => {
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
@@ -189,12 +221,24 @@ function Page() {
 
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // Handle successful login here
-      console.log("Login successful", formData);
+      const res = await fetch("http://localhost:4000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to login");
+      }
+      const data = await res.json();
+      toast.success(data.message);
+      router.push("/dashboard");
     } catch (error) {
-      console.error("Login failed:", error);
+      toast.error("Login failed:", error);
     } finally {
       setIsLoading(false);
     }
@@ -215,12 +259,12 @@ function Page() {
           </div>
 
           <div className="space-y-3 mb-8">
-            <SocialButton
+            {/* <SocialButton
               icon={Github}
               label="GitHub"
               variant="github"
               onClick={() => console.log("GitHub login")}
-            />
+            /> */}
             <SocialButton
               icon={Chrome}
               label="Google"
@@ -242,28 +286,22 @@ function Page() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <InputField
+              name="email"
               icon={Mail}
               type="email"
               placeholder="Email address"
               value={formData.email}
-              onChange={(e) =>
-                handleInputChange({
-                  target: { name: "email", value: e.target.value },
-                })
-              }
+              onChange={handleInputChange}
               error={errors.email}
             />
 
             <InputField
+              name="password"
               icon={Lock}
               type="password"
               placeholder="Password"
               value={formData.password}
-              onChange={(e) =>
-                handleInputChange({
-                  target: { name: "password", value: e.target.value },
-                })
-              }
+              onChange={handleInputChange}
               error={errors.password}
               showPasswordToggle
               onTogglePassword={() => setShowPassword(!showPassword)}

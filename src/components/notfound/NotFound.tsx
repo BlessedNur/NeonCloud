@@ -3,9 +3,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import ParticlesComponent from "../components/Particles/ParticlesBackground";
+import ParticlesComponent from "../Particles/ParticlesBackground";
 
-const Page = () => {
+const NotFound = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
@@ -161,4 +161,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default NotFound;

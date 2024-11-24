@@ -19,6 +19,7 @@ import {
   Wrench,
   RefreshCw,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const FooterLink = ({ href, children }) => (
   <li>
@@ -118,6 +119,7 @@ const Logo = ({ onclick }) => (
 );
 function Footer() {
   const [currentUser, setCurrentUser] = useState(false);
+  const router = useRouter();
   return (
     <footer className="relative z-10 overflow-hidden pt-20 pb-10 text-white">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent pointer-events-none" />

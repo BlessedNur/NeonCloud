@@ -20,7 +20,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
 
 const PolicySection = ({ icon: Icon, title, children, id }) => (
-  <div className="mb-12 z-10 relative"  id={id}>
+  <div className="mb-12 z-10 relative" id={id}>
     <div className="flex items-center gap-3 mb-4">
       <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[rgba(207,8,140,0.2)] to-purple-500/20 flex items-center justify-center">
         <Icon className="text-[rgba(207,8,140,1)]" size={20} />
@@ -86,13 +86,6 @@ function Page() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const sidebarStyle = {
-    position: "sticky",
-    top: `${navHeight + 32}px`, // 32px for padding
-    maxHeight: `calc(100vh - ${navHeight + 64}px)`, // 64px for padding
-    overflowY: "auto",
-  };
 
   const refundSteps = [
     {
@@ -229,8 +222,8 @@ function Page() {
               title="Refund Process"
             >
               <p className="mb-6">
-                To ensure a smooth refund process, we&apos;ve established a clear
-                procedure:
+                To ensure a smooth refund process, we&apos;ve established a
+                clear procedure:
               </p>
               <Timeline steps={refundSteps} />
             </PolicySection>
@@ -312,7 +305,15 @@ function Page() {
             </PolicySection>
           </div>
 
-          <div style={sidebarStyle} className="space-y-6 hidden lg:block">
+          <div
+            style={{
+              position: "sticky",
+              top: `${navHeight + 32}px`,
+              maxHeight: `calc(100vh - ${navHeight + 64}px)`,
+              overflowY: "auto",
+            }}
+            className="space-y-6 hidden lg:block"
+          >
             <div className="p-6 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <nav className="space-y-2">

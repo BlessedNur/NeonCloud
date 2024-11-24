@@ -32,6 +32,7 @@ import DashboardContent from "../../components/dashboardContent/DashboardContent
 import DomainsContent from "../../components/domainSection/DomainsSection";
 import WebHostingContent from "../../components/webhostingsection/WebHostingContent";
 import ProfileContent from "../../components/profile/ProfileContent";
+import { useRouter } from "next/navigation";
 const SidebarItem = ({ icon, text, active, onClick }) => (
   <button
     onClick={onClick}
@@ -257,6 +258,7 @@ const SignOut = () => {
 function Page() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
 
   const mainMenuItems = [
     { icon: <Home size={16} />, text: "Home", id: "dashboard" },

@@ -21,7 +21,11 @@ import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
 
-const Container = ({ className, children }) => (
+type ContainerProps = {
+  className?: string;
+  children: React.ReactNode;
+};
+const Container = ({ className, children }: ContainerProps) => (
   <div className={`mx-auto max-w-[1270px] px-4 sm:px-6 ${className || ""}`}>
     {children}
   </div>

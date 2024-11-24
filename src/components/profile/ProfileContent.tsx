@@ -76,6 +76,10 @@ type UserData = {
   };
 };
 
+// type SecurityTabProps = UserData & {
+//   showPasswordModal: boolean;
+//   setShowPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;
+// };
 const ProfileContent = () => {
   // Base States
   const [isEditing, setIsEditing] = useState(false);
@@ -450,12 +454,6 @@ const ProfileContent = () => {
       </div>
     </Modal>
   );
-
-  interface SecurityTabProps {
-    userData: UserData; 
-    showPasswordModal: boolean;
-    setShowPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;
-  }
 
   const UpgradePlanModal = ({ isOpen, onClose }) => (
     <Modal isOpen={isOpen} onClose={onClose} title="Upgrade Plan">
@@ -942,7 +940,17 @@ const ProfileContent = () => {
     );
   };
 
-  const SecurityTab = ({ userData }) => {
+  interface SecurityTabProps {
+    userData: UserData;
+    showPasswordModal: boolean;
+    setShowPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+
+  const SecurityTab = ({
+    userData,
+    showPasswordModal,
+    setShowPasswordModal,
+  }) => {
     return (
       <div className="space-y-8">
         {/* Password Section */}

@@ -314,7 +314,7 @@ const DomainsContent = () => {
         case "status":
           return a.status.localeCompare(b.status);
         case "date":
-          return new Date(b.registrationDate) - new Date(a.registrationDate);
+          return new Date(b.registrationDate).getTime() - new Date(a.registrationDate).getTime();
         default:
           return 0;
       }

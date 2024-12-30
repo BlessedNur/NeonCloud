@@ -11,10 +11,11 @@ import {
   LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import ParticlesComponent from "../../../../components/Particles/ParticlesBackground";
-import { useRouter } from "next/navigation";
+import ParticlesComponent from "../../components/Particles/ParticlesBackground";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import NotFound from "../../../../components/notfound/NotFound";
+import NotFound from "../../components/notfound/NotFound";
+import { useCloudContext } from "../../context/Context";
 
 const SocialButton = ({ icon: Icon, label, onClick, variant }) => {
   const getVariantStyles = () => {
@@ -177,9 +178,20 @@ type Erros = {
   terms?: string;
 };
 
-function Page({ params }) {
-  const { id } = use<Params>(params);
-  const allowedIds = ["1", "2", "3"];
+function Page() {
+  const searchParams = useSearchParams();
+  const { choosenPlan } = useCloudContext();
+  const [isValidToken, setIsValidToken] = useState(false);
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    const planId = searchParams.get("planId");
+
+    if (token && choosenPlan?.registrationToken === token) {
+      setIsValidToken(true);
+    }
+  }, [searchParams, choosenPlan]);
+
   const router = useRouter();
   const [formData, setFormData] = useState<FormDataProps>({
     email: "",
@@ -275,7 +287,7 @@ function Page({ params }) {
       setIsLoading(false);
     }
   };
-  if (!allowedIds.includes(id)) {
+  if (!isValidToken) {
     return <NotFound />;
   }
 

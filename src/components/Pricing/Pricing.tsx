@@ -1,6 +1,9 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { Check, X, Sparkles, Tag, Clock } from "lucide-react";
+import { useCloudContext } from "../../context/Context";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 const plans = [
   {
@@ -76,6 +79,21 @@ const plans = [
     tag: "Enterprise",
   },
 ];
+type PlanCardType = {
+  title: string;
+  monthlyPrice: string;
+  yearlyPrice: string;
+  period: {
+    monthly: string;
+    yearly: string;
+  };
+  description: string;
+  features: { name: string; included: boolean }[];
+  isHighlighted: boolean;
+  isMonthly: boolean;
+  discount: string;
+  tag: string;
+};
 
 const PlanCard = ({
   title,
@@ -88,7 +106,7 @@ const PlanCard = ({
   isMonthly,
   discount,
   tag,
-}) => {
+}: PlanCardType) => {
   const originalPrice = isMonthly ? monthlyPrice : yearlyPrice;
   const discountedPrice = isMonthly
     ? `$${(
@@ -104,6 +122,26 @@ const PlanCard = ({
     parseFloat(originalPrice.slice(1)) - parseFloat(discountedPrice.slice(1))
   ).toFixed(2);
 
+  const router = useRouter();
+  const { setChoosenPlan } = useCloudContext();
+
+  const handleSelectPlan = () => {
+    const registrationToken = uuidv4();
+
+    setChoosenPlan({
+      title,
+      price: isMonthly ? monthlyPrice : yearlyPrice,
+      period: isMonthly ? period.monthly : period.yearly,
+      description,
+      registrationToken,
+    });
+
+    router.push(
+      `/register?token=${registrationToken}&planId=${encodeURIComponent(
+        title
+      )}`
+    );
+  };
   return (
     <div
       className={`z-[10] relative w-full h-full flex flex-col  gap-8 ${
@@ -188,6 +226,7 @@ const PlanCard = ({
       </ul>
 
       <button
+        onClick={handleSelectPlan}
         className={`w-full py-4 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
           isHighlighted
             ? "bg-white text-purple-600 hover:bg-gray-100 shadow-xl shadow-white/10"
@@ -210,6 +249,7 @@ const PricingSection = ({ isMonthly }) => (
 
 const Pricing = () => {
   const [isMonthly, setIsMonthly] = useState(true);
+  const { choosenPlan, setChoosenPlan } = useCloudContext();
 
   return (
     <div className="py-20 relative z-[100]" id="pricing">

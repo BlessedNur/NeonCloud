@@ -2,8 +2,10 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function Banner() {
+  const router = useRouter();
   return (
     <div className="relative min-h-[90vh] md:min-h-0 flex items-center max-w-[1270px] mx-auto px-4 py-12">
       <div className="absolute inset-0 -z-10 md:hidden">
@@ -31,13 +33,19 @@ function Banner() {
 
           <div className="flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
             {/* Primary button matching the provided gradient */}
-            <button className="bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 group shadow-[0_0_15px_rgba(207,8,140,0.3)]">
+            <button
+              onClick={() => router.push("#pricing")}
+              className="bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 group shadow-[0_0_15px_rgba(207,8,140,0.3)]"
+            >
               <span className="font-medium">Get Started</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
 
             {/* Secondary button with complementary styling */}
-            <button className="px-6 py-3 rounded-lg border border-[rgba(207,8,140,0.3)] hover:bg-[rgba(207,8,140,0.1)] transition-all duration-300 shadow-[0_0_15px_rgba(207,8,140,0.1)]">
+            <button
+              onClick={() => router.push("/about")}
+              className="px-6 py-3 rounded-lg border border-[rgba(207,8,140,0.3)] hover:bg-[rgba(207,8,140,0.1)] transition-all duration-300 shadow-[0_0_15px_rgba(207,8,140,0.1)]"
+            >
               Learn More
             </button>
           </div>

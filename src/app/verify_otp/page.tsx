@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Smartphone, Timer, RefreshCcw } from "lucide-react";
@@ -215,7 +216,7 @@ function Page() {
   return (
     <>
       <Logo onclick={() => router.push("/")} />
-      <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
+      <div className="min-h-screen  text-white flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           <Link
             href="/forgot_password"

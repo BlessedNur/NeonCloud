@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   Globe,
   Cloud,
@@ -14,14 +14,59 @@ import {
   Activity,
   Shield,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useCloudContext } from "../../context/Context";
+
+// Add this at the top of the file, after imports
+const useDeploymentData = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:4000/api/deployments");
+      const result = await response.json();
+
+      if (result.success) {
+        setData(result.data);
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      setError(error.message);
+      toast.error("Failed to fetch deployment data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return { data, isLoading, error, refetch: fetchData };
+};
 
 const DashboardContent = () => {
+  const { currentUser, choosenPlan } = useCloudContext();
   const [selectedPeriod, setSelectedPeriod] = useState("24h");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { data, isLoading, refetch } = useDeploymentData();
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
+    await refetch();
     setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
+  // Calculate statistics
+  const stats = {
+    totalDomains: data.length,
+    activeDomains: data.filter((d) => d.status === "completed").length,
+    failedDomains: data.filter((d) => d.status === "failed").length,
+    pendingDomains: data.filter((d) => d.status === "in_progress").length,
   };
 
   return (
@@ -29,7 +74,7 @@ const DashboardContent = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold mb-1">
-            Nur&apos;s Dashboard
+            {currentUser?.email.split("@")[0]}&apos;s Dashboard
           </h1>
           <p className="text-gray-400 text-sm">
             Last updated: {new Date().toLocaleString()}
@@ -56,81 +101,28 @@ const DashboardContent = () => {
         </div>
       </div>
 
-      <ServiceStatus />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          icon={<Cloud className="w-5 h-5 text-blue-400" />}
-          title="Hosting Space"
-          value="45.2 GB"
-          trend="72%"
-          trendDuration="of 100 GB"
-          trendUp={true}
-          details={[
-            { label: "Files", value: "1,234" },
-            { label: "Databases", value: "3" },
-          ]}
-        />
-        <StatCard
-          icon={<Globe className="w-5 h-5 text-purple-400" />}
-          title="Domains"
-          value="2"
-          trend="Active"
-          trendDuration="All domains healthy"
-          trendUp={true}
-          details={[
-            { label: "Primary", value: "1" },
-            { label: "Addon", value: "1" },
-          ]}
-        />
-        <StatCard
-          icon={<Activity className="w-5 h-5 text-green-400" />}
-          title="Website Traffic"
-          value="1.2K"
-          trend="+15%"
-          trendDuration="vs last month"
-          trendUp={true}
-          details={[
-            { label: "Unique Visitors", value: "856" },
-            { label: "Avg. Duration", value: "2m 34s" },
-          ]}
-        />
-        <StatCard
-          icon={<HardDrive className="w-5 h-5 text-yellow-400" />}
-          title="Bandwidth"
-          value="45.6 GB"
-          trend="30%"
-          trendDuration="of 150 GB"
-          trendUp={true}
-          details={[
-            { label: "Download", value: "38.2 GB" },
-            { label: "Upload", value: "7.4 GB" },
-          ]}
-        />
-      </div>
+      <ServiceStatus stats={stats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <WebsiteStatus />
+          <WebsiteStatus deployments={data} isLoading={isLoading} />
           <RecentActivities />
         </div>
         <div className="space-y-6">
           <DomainStatus />
-          <QuickActions />
-          <UpcomingRenewals />
         </div>
       </div>
     </div>
   );
 };
-
-const ServiceStatus = () => (
+const ServiceStatus = ({ stats }) => (
   <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 flex items-center gap-3">
     <AlertCircle className="w-5 h-5 text-green-500" />
     <div className="flex-1">
-      <h3 className="text-green-500 font-medium">All Services Operational</h3>
+      <h3 className="text-green-500 font-medium">Service Status Overview</h3>
       <p className="text-green-500/80 text-sm">
-        Your websites and services are running smoothly
+        {stats.activeDomains} active, {stats.pendingDomains} pending,{" "}
+        {stats.failedDomains} failed deployments
       </p>
     </div>
     <button className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 rounded-lg text-green-500 text-sm transition-colors">
@@ -139,13 +131,23 @@ const ServiceStatus = () => (
   </div>
 );
 
-const StatCard = ({ icon, title, value, trend, trendDuration, trendUp, details }) => (
+const StatCard = ({
+  icon,
+  title,
+  value,
+  trend,
+  trendDuration,
+  trendUp,
+  details,
+}) => (
   <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
     <div className="flex items-start justify-between mb-4">
       <div className="p-2 bg-white/5 rounded-lg">{icon}</div>
-      <div className={`flex items-center gap-1 text-sm ${
-        trendUp ? "text-green-400" : "text-red-400"
-      }`}>
+      <div
+        className={`flex items-center gap-1 text-sm ${
+          trendUp ? "text-green-400" : "text-red-400"
+        }`}
+      >
         {trendUp ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
         {trend}
       </div>
@@ -163,26 +165,16 @@ const StatCard = ({ icon, title, value, trend, trendDuration, trendUp, details }
     </div>
   </div>
 );
-
-const WebsiteStatus = () => {
-  const websites = [
-    {
-      domain: "welcome.neoncloud.io",
-      status: "active",
-      uptime: "99.9%",
-      lastBackup: "2 hours ago",
-      ssl: "Valid",
-      traffic: "1.2k visitors today"
-    },
-    {
-      domain: "blog.neoncloud.io",
-      status: "active",
-      uptime: "99.8%",
-      lastBackup: "4 hours ago",
-      ssl: "Valid",
-      traffic: "856 visitors today"
-    },
-  ];
+const WebsiteStatus = ({ deployments, isLoading }) => {
+  if (isLoading) {
+    return (
+      <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <div className="flex items-center justify-center p-4">
+          <RefreshCw className="w-6 h-6 animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
@@ -193,205 +185,233 @@ const WebsiteStatus = () => {
         </button>
       </div>
       <div className="space-y-4">
-        {websites.map((site, index) => (
-          <div key={index} className="p-4 bg-white/5 rounded-lg">
+        {deployments.map((site) => (
+          <div key={site._id} className="p-4 bg-white/5 rounded-lg">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <Globe className="w-5 h-5 text-blue-400" />
                 <div>
-                  <h3 className="font-medium">{site.domain}</h3>
-                  <p className="text-sm text-gray-400">{site.traffic}</p>
+                  <h3 className="font-medium">{site.customDomain}</h3>
+                  <p className="text-sm text-gray-400">
+                    Bucket: {site.bucketName}
+                  </p>
                 </div>
               </div>
-              <div className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
+              <div
+                className={`px-3 py-1 ${
+                  site.status === "completed"
+                    ? "bg-green-500/20 text-green-400"
+                    : site.status === "failed"
+                    ? "bg-red-500/20 text-red-400"
+                    : "bg-yellow-500/20 text-yellow-400"
+                } rounded-full text-sm`}
+              >
                 {site.status}
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div>
-                <p className="text-gray-400">Uptime</p>
-                <p>{site.uptime}</p>
+                <p className="text-gray-400">Created</p>
+                <p>{new Date(site.createdAt).toLocaleDateString()}</p>
               </div>
               <div>
-                <p className="text-gray-400">Last Backup</p>
-                <p>{site.lastBackup}</p>
+                <p className="text-gray-400">Status</p>
+                <p>{site.status === "completed" ? "Active" : site.status}</p>
               </div>
               <div>
-                <p className="text-gray-400">SSL Certificate</p>
-                <p>{site.ssl}</p>
+                <p className="text-gray-400">Domain Type</p>
+                <p>
+                  {site.customDomain.includes("neoncloudd.com")
+                    ? "Subdomain"
+                    : "Custom"}
+                </p>
               </div>
             </div>
           </div>
         ))}
+        {deployments.length === 0 && (
+          <div className="text-center py-6 text-gray-400">
+            No websites found
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 const RecentActivities = () => {
-  const activities = [
-    {
-      type: "backup",
-      icon: <Clock className="w-5 h-5 text-blue-400" />,
-      title: "Automatic Backup Completed",
-      description: "mywebsite.com backup completed successfully",
-      time: "2 hours ago"
-    },
-    {
-      type: "security",
-      icon: <Shield className="w-5 h-5 text-green-400" />,
-      title: "SSL Certificate Renewed",
-      description: "SSL certificate for blog.mywebsite.com renewed automatically",
-      time: "5 hours ago"
-    },
-    {
-      type: "traffic",
-      icon: <Activity className="w-5 h-5 text-purple-400" />,
-      title: "Traffic Spike Detected",
-      description: "Unusual traffic increase on mywebsite.com",
-      time: "12 hours ago"
-    },
-    {
-      type: "update",
-      icon: <RefreshCw className="w-5 h-5 text-yellow-400" />,
-      title: "System Updates Completed",
-      description: "All website components are up to date",
-      time: "1 day ago"
-    },
-    {
-      type: "domain",
-      icon: <Globe className="w-5 h-5 text-pink-400" />,
-      title: "Domain Settings Updated",
-      description: "DNS settings changed for mywebsite.com",
-      time: "2 days ago"
+  const [activities, setActivities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/deployments");
+        const data = await response.json();
+
+        if (data.success) {
+          setActivities(data.data);
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching activities:", error);
+        toast.error("Failed to fetch activities");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchActivities();
+  }, []);
+
+  const getActivityIcon = (status) => {
+    switch (status) {
+      case "completed":
+        return <Shield className="w-5 h-5 text-green-400" />;
+      case "failed":
+        return <AlertCircle className="w-5 h-5 text-red-400" />;
+      default:
+        return <Clock className="w-5 h-5 text-yellow-400" />;
     }
-  ];
+  };
+
+  const getActivityTitle = (deployment) => {
+    switch (deployment.status) {
+      case "completed":
+        return `Deployment Completed: ${deployment.customDomain}`;
+      case "failed":
+        return `Deployment Failed: ${deployment.customDomain}`;
+      default:
+        return `Deployment In Progress: ${deployment.customDomain}`;
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <h2 className="text-xl font-semibold mb-4">Recent Activities</h2>
+        <div className="flex items-center justify-center p-4">
+          <RefreshCw className="w-6 h-6 animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">Recent Activities</h2>
       <div className="space-y-4">
-        {activities.map((activity, index) => (
-          <div key={index} className="flex items-start gap-4 p-3 bg-white/5 rounded-lg">
+        {activities.map((activity) => (
+          <div
+            key={activity._id}
+            className="flex items-start gap-4 p-3 bg-white/5 rounded-lg"
+          >
             <div className="p-2 bg-white/5 rounded-lg">
-              {activity.icon}
+              {getActivityIcon(activity.status)}
             </div>
             <div className="flex-1">
-              <h3 className="font-medium text-sm">{activity.title}</h3>
-              <p className="text-sm text-gray-400 mt-1">{activity.description}</p>
-              <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+              <h3 className="font-medium text-sm">
+                {getActivityTitle(activity)}
+              </h3>
+              <p className="text-sm text-gray-400 mt-1">
+                Bucket: {activity.bucketName}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {new Date(activity.createdAt).toLocaleString()}
+              </p>
             </div>
           </div>
         ))}
+        {activities.length === 0 && (
+          <div className="text-center py-6 text-gray-400">
+            No recent activities
+          </div>
+        )}
       </div>
     </div>
   );
 };
-
 const DomainStatus = () => {
-  const domains = [
-    {
-      domain: "mywebsite.com",
-      expires: "2025-01-15",
-      autoRenew: true,
-    },
-    {
-      domain: "blog.mywebsite.com",
-      expires: "2025-01-15",
-      autoRenew: true,
-    },
-  ];
+  const [domains, setDomains] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDomains = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/deployments");
+        const data = await response.json();
+
+        if (data.success) {
+          setDomains(data.data);
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching domains:", error);
+        toast.error("Failed to fetch domains");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDomains();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <h2 className="text-xl font-semibold mb-4">Domain Status</h2>
+        <div className="flex items-center justify-center p-4">
+          <RefreshCw className="w-6 h-6 animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">Domain Status</h2>
       <div className="space-y-4">
-        {domains.map((domain, index) => (
-          <div key={index} className="p-3 bg-white/5 rounded-lg">
+        {domains.map((domain) => (
+          <div key={domain._id} className="p-3 bg-white/5 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium">{domain.domain}</h4>
+              <h4 className="font-medium">{domain.customDomain}</h4>
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                <span className="text-sm text-green-400">Active</span>
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    domain.status === "completed"
+                      ? "bg-green-400"
+                      : domain.status === "failed"
+                      ? "bg-red-400"
+                      : "bg-yellow-400"
+                  }`}
+                ></span>
+                <span
+                  className={`text-sm ${
+                    domain.status === "completed"
+                      ? "text-green-400"
+                      : domain.status === "failed"
+                      ? "text-red-400"
+                      : "text-yellow-400"
+                  }`}
+                >
+                  {domain.status === "completed"
+                    ? "Active"
+                    : domain.status === "failed"
+                    ? "Failed"
+                    : "Pending"}
+                </span>
               </div>
             </div>
             <div className="text-sm text-gray-400">
-              Expires: {new Date(domain.expires).toLocaleDateString()}
+              Created: {new Date(domain.createdAt).toLocaleDateString()}
             </div>
           </div>
         ))}
-      </div>
-    </div>
-  );
-};
-
-const QuickActions = () => {
-  const actions = [
-    { icon: <Link size={18} />, label: "File Manager", color: "text-blue-400" },
-    { icon: <Shield size={18} />, label: "Security", color: "text-green-400" },
-    { icon: <Settings size={18} />, label: "Settings", color: "text-purple-400" },
-    { icon: <Clock size={18} />, label: "Backups", color: "text-yellow-400" },
-  ];
-
-  return (
-    <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {actions.map((action, index) => (
-          <button
-            key={index}
-            className="flex flex-col items-center gap-2 p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <div className={`${action.color}`}>{action.icon}</div>
-            <span className="text-sm">{action.label}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-const UpcomingRenewals = () => {
-  const renewals = [
-    {
-      service: "Hosting Plan",
-      expires: "2024-12-15",
-      price: "$9.99",
-      period: "month",
-      autoRenew: true
-    },
-    {
-      service: "Domain Name",
-      expires: "2025-01-15",
-      price: "$12.99",
-      period: "year",
-      autoRenew: true
-    },
-  ];
-
-  return (
-    <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">Upcoming Renewals</h2>
-      <div className="space-y-4">
-        {renewals.map((renewal, index) => (
-          <div key={index} className="p-3 bg-white/5 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <h4 className="font-medium">{renewal.service}</h4>
-                <p className="text-sm text-gray-400">
-                  Expires: {new Date(renewal.expires).toLocaleDateString()}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-[rgba(207,8,140,1)] font-medium">
-                  {renewal.price}/{renewal.period}
-                </p>
-                <p className="text-xs text-gray-400">
-                  {renewal.autoRenew ? "Auto-renewal enabled" : "Auto-renewal disabled"}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
+        {domains.length === 0 && (
+          <div className="text-center py-6 text-gray-400">No domains found</div>
+        )}
       </div>
     </div>
   );

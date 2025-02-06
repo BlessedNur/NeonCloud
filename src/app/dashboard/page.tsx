@@ -33,6 +33,9 @@ import DomainsContent from "../../components/domainSection/DomainsSection";
 import WebHostingContent from "../../components/webhostingsection/WebHostingContent";
 import ProfileContent from "../../components/profile/ProfileContent";
 import { useRouter } from "next/navigation";
+import { useCloudContext } from "../../context/Context";
+import { useApi } from "../../services/api.profile";
+import ProtectedRoute from "../../components/auth/ProtectedRoutes";
 const SidebarItem = ({ icon, text, active, onClick }) => (
   <button
     onClick={onClick}
@@ -124,22 +127,62 @@ const Logo = ({ onclick }) => (
     </div>
   </div>
 );
-const UserMenu = () => {
+const UserMenu = ({
+  currentUser,
+  choosenPlan,
+  logout,
+  setActiveTab,
+}: {
+  currentUser: any;
+  setActiveTab: (tab: string) => void;
+  choosenPlan?: any;
+  logout: any;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const { profileApi } = useApi();
+
+  // Fetch user profile when component mounts
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await profileApi.getProfile();
+        if (response.error === false && response.profile) {
+          setUserProfile(response.profile);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  // Helper function to get avatar URL
+  const getAvatarUrl = () => {
+    if (userProfile?.avatar) {
+      return userProfile.avatar;
+    }
+    return "https://i.pravatar.cc/100"; // Fallback avatar
+  };
 
   return (
     <div
-      className="relative "
+      className="relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 p-[2px] cursor-pointer">
         <div className="w-full h-full rounded-full overflow-hidden bg-black/40 backdrop-blur-sm">
-          <img
-            src="https://i.pravatar.cc/100"
-            alt="User"
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
+          {userProfile?.avatar ? (
+            <img
+              src={getAvatarUrl()}
+              alt={userProfile?.name || "User"}
+              className="w-full h-full object-cover hover:scale-105 transition-transform"
+            />
+          ) : (
+            <User className="w-full h-full p-2 text-gray-400" />
+          )}
         </div>
       </div>
       {isHovered && (
@@ -148,16 +191,22 @@ const UserMenu = () => {
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 p-[2px]">
                 <div className="w-full h-full rounded-full overflow-hidden bg-black/40 backdrop-blur-sm">
-                  <img
-                    src="https://i.pravatar.cc/100"
-                    alt="User"
-                    className="w-full h-full object-cover"
-                  />
+                  {userProfile?.avatar ? (
+                    <img
+                      src={getAvatarUrl()}
+                      alt={userProfile?.name || "User"}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-full h-full p-3 text-gray-400" />
+                  )}
                 </div>
               </div>
               <div>
-                <p className="text-sm font-medium text-white">John Doe</p>
-                <p className="text-xs text-gray-400">john.doe@example.com</p>
+                <p className="text-sm font-medium text-white">
+                  {userProfile?.name || currentUser?.email.split("@")[0]}
+                </p>
+                <p className="text-xs text-gray-400">{currentUser?.email}</p>
               </div>
             </div>
           </div>
@@ -165,38 +214,17 @@ const UserMenu = () => {
           <div className="px-4 py-3 space-y-3">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-400">Subscription Plan</span>
+                <span className="text-xs text-gray-400">Plan</span>
                 <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-600 text-white">
-                  Pro Plan
+                  {currentUser?.plan} Plan
                 </span>
               </div>
-
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-400">Storage Usage</span>
-                  <span className="text-xs text-white">75GB / 100GB</span>
+              {userProfile?.location && (
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Globe size={12} />
+                  <span>{userProfile.location}</span>
                 </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-600 rounded-full"
-                    style={{ width: "75%" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-400">Next Billing</span>
-                <span className="text-xs text-white">Dec 15, 2024</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-400">Account Status</span>
-                <span className="text-xs text-green-400 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
-                  Active
-                </span>
-              </div>
+              )}
             </div>
           </div>
 
@@ -204,17 +232,15 @@ const UserMenu = () => {
             <UserMenuItem
               icon={<User size={14} />}
               text="View Profile"
-              onClick={() => {}}
-            />
-            <UserMenuItem
-              icon={<HelpCircle size={14} />}
-              text="Help Center"
-              onClick={() => {}}
+              onClick={() => {
+                setActiveTab("profile");
+              }}
+              className="text-gray-400 hover:text-white"
             />
             <UserMenuItem
               icon={<LogOut size={14} />}
               text="Sign Out"
-              onClick={() => {}}
+              onClick={logout}
               className="text-red-400 hover:text-red-300"
             />
           </div>
@@ -234,14 +260,14 @@ const UserMenuItem = ({ icon, text, onClick, className = "" }) => (
   </button>
 );
 
-const SignOut = () => {
+const SignOut = ({ logout }) => {
   const handleSignOut = () => {
     console.log("Signing out...");
   };
 
   return (
     <button
-      onClick={handleSignOut}
+      onClick={logout}
       className="w-full p-4 border-t border-white/10 flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
     >
       <LogOut
@@ -256,9 +282,11 @@ const SignOut = () => {
 };
 
 function Page() {
+  const { currentUser, logout, choosenPlan } = useCloudContext();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
+  console.log(currentUser);
 
   const mainMenuItems = [
     { icon: <Home size={16} />, text: "Home", id: "dashboard" },
@@ -273,7 +301,7 @@ function Page() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <>
+    <ProtectedRoute>
       <section className="h-screen flex flex-col overflow-hidden">
         <header className="bg-black/5 backdrop-blur-[2px] border-b border-white/10 p-4 flex-shrink-0 relative z-30 ">
           <div className="flex items-center justify-between mx-auto">
@@ -287,13 +315,11 @@ function Page() {
               <Logo onclick={() => router.push("/")} />
             </div>
             <div className="flex items-center gap-2 md:gap-4">
-              <button className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors">
-                <Bell size={18} />
-              </button>
-              <button className="hidden sm:block p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors">
-                <HelpCircle size={18} />
-              </button>
-              <UserMenu />
+              <UserMenu
+                setActiveTab={setActiveTab}
+                logout={logout}
+                currentUser={currentUser}
+              />
             </div>
           </div>
         </header>
@@ -351,7 +377,7 @@ function Page() {
                 </SidebarSection>
               </div>
             </div>
-            <SignOut />{" "}
+            <SignOut logout={logout} />{" "}
           </div>
 
           <div className="flex-1 z-10 flex flex-col overflow-hidden">
@@ -367,9 +393,8 @@ function Page() {
         </div>
       </section>
       <ParticlesComponent />
-    </>
+    </ProtectedRoute>
   );
 }
 
 export default Page;
-

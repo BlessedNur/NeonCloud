@@ -4,6 +4,7 @@ import { CheckCircle, XCircle, Loader, Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const VerificationState = {
   VERIFYING: "VERIFYING",
@@ -170,18 +171,17 @@ const Logo = ({ onclick }) => (
 );
 
 function Page() {
+  const NEXT_PUBLIC_API_URL = "http://localhost:4000";
   const router = useRouter();
-
   const [verificationState, setVerificationState] = useState(
     VerificationState.VERIFYING
   );
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
 
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
   useEffect(() => {
-    // Get token from URL
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
     const email = params.get("email");
     setEmail(email);
 
@@ -196,37 +196,69 @@ function Page() {
 
   const verifyEmail = async (token) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await fetch(
+        `${NEXT_PUBLIC_API_URL}/auth/verify_email?token=${token}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // For demo purposes, randomly succeed or fail
-      if (Math.random() > 0.5) {
-        setVerificationState(VerificationState.SUCCESS);
-      } else {
-        throw new Error("Verification failed");
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.message);
       }
+      toast.success("Email verified successfully!");
+      setVerificationState(VerificationState.SUCCESS);
     } catch (err) {
+      toast.error(err.message);
       setVerificationState(VerificationState.ERROR);
-      setError(err.message);
+      setError(err.message || "Verification failed. Please try again.");
     }
   };
 
   const handleResend = async () => {
+    if (!email) {
+      setError("Email address is required for resending verification.");
+      return;
+    }
+
     setVerificationState(VerificationState.RESENDING);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch(
+        `${NEXT_PUBLIC_API_URL}/auth/resend-verification`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.message);
+      }
+      toast.success("Verification email sent successfully!");
       setVerificationState(VerificationState.RESEND_SUCCESS);
     } catch (err) {
+      toast.error(err.message);
       setVerificationState(VerificationState.ERROR);
-      setError("Failed to resend verification email. Please try again.");
+      setError(
+        err.message || "Failed to resend verification email. Please try again."
+      );
     }
   };
 
   return (
     <>
       <Logo onclick={() => router.push("/")} />
-      <div className="min-h-screen relative z-10 bg-black text-white flex items-center justify-center p-6">
+      <div className="min-h-screen relative z-10  text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
           {(verificationState === VerificationState.ERROR ||
             verificationState === VerificationState.RESEND_SUCCESS) && (

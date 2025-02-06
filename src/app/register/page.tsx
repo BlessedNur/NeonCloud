@@ -16,6 +16,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import NotFound from "../../components/notfound/NotFound";
 import { useCloudContext } from "../../context/Context";
+import PublicRoute from "../../components/auth/PublicRoutes";
 
 const SocialButton = ({ icon: Icon, label, onClick, variant }) => {
   const getVariantStyles = () => {
@@ -258,7 +259,7 @@ function Page() {
     }
 
     setIsLoading(true);
-    console.log(formData);
+    console.log(formData, choosenPlan.title);
     try {
       const res = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
@@ -268,6 +269,7 @@ function Page() {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
+          plan: choosenPlan.title,
         }),
       });
       const data = await res.json();
@@ -292,7 +294,7 @@ function Page() {
   }
 
   return (
-    <>
+    <PublicRoute>
       <Logo onclick={() => router.push("/")} />
       <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
@@ -424,7 +426,7 @@ function Page() {
           <div className="mt-8 text-center">
             <p className="text-gray-400">Already have an account?</p>
             <Link
-              href="/login"
+              href="/signin"
               className="text-[rgba(207,8,140,1)] hover:text-[rgba(207,8,140,0.8)] transition-colors text-lg font-medium"
             >
               Sign in to your account
@@ -454,7 +456,7 @@ function Page() {
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
       </div>
       <ParticlesComponent />
-    </>
+    </PublicRoute>
   );
 }
 

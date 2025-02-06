@@ -1,7 +1,16 @@
 "use client";
 import { Search, Timer, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const DomainOfferSection = () => {
+  const router = useRouter();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const searchInput = e.target.querySelector("input").value;
+    if (searchInput) {
+      router.push(`/domain?search=${encodeURIComponent(searchInput)}`);
+    }
+  };
   return (
     <div className="relative overflow-hidden z-[2]">
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 blur-3xl" />
@@ -48,7 +57,10 @@ const DomainOfferSection = () => {
 
             <div className="flex flex-col gap-5 w-full lg:w-auto">
               <div className="group relative">
-                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl w-full lg:w-fit p-3 pl-4 rounded-xl border border-white/10 shadow-xl transition-all duration-300 hover:border-purple-500/30">
+                <form
+                  onSubmit={handleSearch}
+                  className="flex items-center gap-2 bg-white/10 backdrop-blur-xl w-full lg:w-fit p-3 pl-4 rounded-xl border border-white/10 shadow-xl transition-all duration-300 hover:border-purple-500/30"
+                >
                   <Search className="w-5 h-5 text-gray-400" />
                   <input
                     type="text"
@@ -56,15 +68,18 @@ const DomainOfferSection = () => {
                     placeholder="Type Your Domain Name"
                   />
                   <span className="font-medium text-sm whitespace-nowrap text-gray-300 px-3 border-l border-gray-700">
-                    .neoncloud.online
+                    .neoncloudd.com
                   </span>
-                  <button className="relative px-7 py-3 rounded-lg group">
+                  <button
+                    type="submit"
+                    className="relative px-7 py-3 rounded-lg group"
+                  >
                     <div className="absolute inset-0 bg-gradient-to-r rounded-lg from-purple-600 to-blue-600 transition-all duration-300 group-hover:scale-105" />
                     <span className="relative text-white font-medium flex items-center gap-2">
                       Search
                     </span>
                   </button>
-                </div>
+                </form>
               </div>
 
               <div className="text-center lg:text-right space-y-1">

@@ -13,6 +13,8 @@ import Link from "next/link";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useCloudContext } from "../../context/Context";
+import PublicRoute from "../../components/auth/PublicRoutes";
 
 const SocialButton = ({ icon: Icon, label, onClick, variant }) => {
   const getVariantStyles = () => {
@@ -174,6 +176,8 @@ type FormErrors = {
 
 function Page() {
   const router = useRouter();
+  const { login } = useCloudContext(); // Use your context hook
+
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -196,6 +200,7 @@ function Page() {
     }
     return newErrors;
   };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -231,21 +236,45 @@ function Page() {
           password: formData.password,
         }),
       });
-      if (!res.ok) {
-        throw new Error("Failed to login");
-      }
+
       const data = await res.json();
-      toast.success(data.message);
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      // Properly structure the AuthResponse data
+      login({
+        success: true,
+        message: "Login successful",
+        user: {
+          email: data.user.email,
+          role: data.user.role,
+          plan: data.user.plan,
+        },
+        token: data.token, // Make sure the token is included
+        email: data.user.email,
+        data: {
+          plan: data.user.plan || "",
+          emailVerified: data.user.emailVerified || false,
+        },
+      });
+
+      toast.success("Login successful!");
       router.push("/dashboard");
     } catch (error) {
-      toast.error("Login failed:", error);
+      toast.error(error instanceof Error ? error.message : "Login failed");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleGoogleLogin = () => {
+    toast.error("Google login is not implemented yet");
+  };
+
   return (
-    <>
+    <PublicRoute>
       <Logo onclick={() => router.push("/")} />
       <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
@@ -269,7 +298,7 @@ function Page() {
               icon={Chrome}
               label="Google"
               variant="google"
-              onClick={() => console.log("Google login")}
+              onClick={handleGoogleLogin}
             />
           </div>
 
@@ -343,7 +372,7 @@ function Page() {
           <div className="mt-8 text-center">
             <p className="text-gray-400">Not a member yet?</p>
             <Link
-              href="/pricing"
+              href="/#pricing"
               className="text-[rgba(207,8,140,1)] hover:text-[rgba(207,8,140,0.8)] transition-colors text-lg font-medium"
             >
               Choose a hosting plan and get started now!
@@ -373,7 +402,7 @@ function Page() {
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
       </div>
       <ParticlesComponent />
-    </>
+    </PublicRoute>
   );
 }
 

@@ -138,7 +138,7 @@ function Page() {
     return re.test(email);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError("");
     setStatus(null);
@@ -155,7 +155,23 @@ function Page() {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch(
+        "http://localhost:4000/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to send reset instructions");
+      }
+
       setStatus({
         type: "success",
         message: "Password reset instructions have been sent to your email.",
@@ -164,13 +180,12 @@ function Page() {
     } catch (err) {
       setStatus({
         type: "error",
-        message: "Something went wrong. Please try again later.",
+        message: err.message || "Something went wrong. Please try again later.",
       });
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <>
       <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">

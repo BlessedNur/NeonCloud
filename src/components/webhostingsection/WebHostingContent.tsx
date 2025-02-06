@@ -32,6 +32,7 @@ import {
   Image,
   Trash2,
 } from "lucide-react";
+import { api } from "../../services/api";
 
 const path = require("path");
 
@@ -153,13 +154,16 @@ const processDirectory = async (entry: FileSystemDirectoryEntry) => {
 };
 
 const WebHostingContent = () => {
+  const [projectId, setProjectId] = useState<string | null>(null);
   const [deployMethod, setDeployMethod] = useState("upload");
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [deploymentStatus, setDeploymentStatus] = useState(null);
-  const [selectedDomain, setSelectedDomain] = useState(null);
+  const [selectedDomain, setSelectedDomain] = useState<String | null>(null);
+  const [customDomain, setCustomDomain] = useState<String | null>(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [canDeploy, setCanDeploy] = useState<Boolean | null>(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({});
   const [showLivePreview, setShowLivePreview] = useState(false);
@@ -167,14 +171,21 @@ const WebHostingContent = () => {
 
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployedUrl, setDeployedUrl] = useState(null);
-
-  // Add this function to handle deployment
   const handleDeploy = useCallback(async () => {
-    if (uploadedFiles.length === 0 || !selectedDomain) return;
+    if (uploadedFiles.length === 0 || !customDomain) {
+      toast.error("Please provide files and a subdomain");
+      return;
+    }
 
     setIsDeploying(true);
     setDeploymentStatus("deploying");
-    setDeploymentLog([]);
+    setDeploymentLog((prev) => [
+      ...prev,
+      {
+        timestamp: new Date().toISOString(),
+        message: "Starting deployment...",
+      },
+    ]);
 
     const addLog = (message) => {
       setDeploymentLog((prev) => [
@@ -184,44 +195,81 @@ const WebHostingContent = () => {
     };
 
     try {
-      // Step 1: Initialize deployment
-      addLog("Initializing deployment...");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Extract subdomain from customDomain
+      const subdomain = customDomain.split(".")[0];
 
-      // Step 2: Validate files
-      addLog("Validating uploaded files...");
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Step 1: Create project
+      addLog("Creating project...");
+      const { data: project } = await api.createProject({
+        name: subdomain || `project-${Date.now()}`,
+        framework: "static",
+        buildCommand: "",
+        outputDirectory: "",
+        domain: customDomain,
+      });
 
-      // Step 3: Process files
-      addLog("Processing files for deployment...");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setProjectId(project._id);
+      addLog("Project created successfully");
 
-      // Step 4: Configure domain
-      addLog(`Configuring domain: ${selectedDomain}`);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Step 2: Upload and deploy files with subdomain
+      addLog("Uploading files...");
+      const deployResult = await api.deployProject({
+        projectId: project._id,
+        files: uploadedFiles,
+        subdomain,
+      });
 
-      // Step 5: Deploy
-      addLog("Deploying to production servers...");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Step 6: Final checks
-      addLog("Running final checks...");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Success
+      // Success handling
       addLog("🚀 Deployment successful!");
-      setDeploymentStatus("success");
-      setDeployedUrl(`https://${selectedDomain}`);
-
+      setDeploymentStatus("success"); // Make sure this is set
+      setDeployedUrl(deployResult.url);
       toast.success("Deployment completed successfully!");
+
+      // Clear deployment state after success
+      setTimeout(() => {
+        setIsDeploying(false);
+      }, 1000);
     } catch (error) {
-      addLog("❌ Deployment failed: " + error.message);
+      console.error("Deployment error:", error);
+      addLog(`❌ Deployment failed: ${error.message}`);
       setDeploymentStatus("error");
-      toast.error("Deployment failed. Please try again.");
-    } finally {
+      toast.error(error.message || "Deployment failed. Please try again.");
       setIsDeploying(false);
     }
-  }, [uploadedFiles, selectedDomain]);
+  }, [uploadedFiles, customDomain]);
+
+  useEffect(() => {
+    if (!deploymentStatus || deploymentStatus !== "deploying") return;
+
+    const ws = new WebSocket(`ws://localhost:4000/ws/deployment/${projectId}`);
+
+    ws.onopen = () => {
+      console.log("WebSocket connection established");
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const log = JSON.parse(event.data);
+        setDeploymentLog((prev) => [...prev, log]);
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
+  }, [deploymentStatus, projectId]);
 
   const simulateUpload = (files: any) => {
     files.forEach((file: any) => {
@@ -306,6 +354,43 @@ const WebHostingContent = () => {
     }
   };
 
+  const DeploymentLogs = ({ logs = [] }) => {
+    const logsRef = useRef(null);
+
+    // Auto-scroll to bottom when new logs are added
+    useEffect(() => {
+      if (logsRef.current) {
+        logsRef.current.scrollTop = logsRef.current.scrollHeight;
+      }
+    }, [logs]);
+
+    return (
+      <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <h3 className="text-lg font-medium mb-4">Deployment Logs</h3>
+        {logs.length > 0 ? (
+          <div
+            ref={logsRef}
+            className="bg-black/50 rounded-lg p-4 h-[calc(100vh-24rem)] overflow-y-auto font-mono text-sm"
+          >
+            {logs.map((log, index) => (
+              <div key={index} className="flex items-start gap-2 mb-2">
+                <span className="text-gray-400">
+                  [{new Date(log.timestamp).toLocaleTimeString()}]
+                </span>
+                <span className="text-gray-200">{log.message}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-400 py-8">
+            No deployment logs available yet. Start a deployment to see logs
+            here.
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Replace your existing handleDrop function with this one
   const handleDrop = useCallback((e) => {
     e.preventDefault();
@@ -321,6 +406,61 @@ const WebHostingContent = () => {
     handleFiles(files);
   };
 
+  if (deployedUrl) {
+    return (
+      <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+        <div className="text-center space-y-6">
+          <div className="flex items-center justify-center gap-2 text-green-400">
+            <CheckCircle className="w-6 h-6" />
+            <h3 className="text-lg font-medium">Deployment Successful!</h3>
+          </div>
+
+          <div className="p-6 border border-white/10 rounded-lg bg-black/50">
+            <h4 className="text-sm font-medium mb-4">
+              Your website is live at:
+            </h4>
+            <div className="flex items-center justify-center gap-3">
+              <a
+                href={deployedUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[rgba(207,8,140,1)] hover:underline flex items-center gap-2"
+              >
+                <Globe className="w-4 h-4" />
+                {deployedUrl}
+              </a>
+              <button
+                onClick={() => navigator.clipboard.writeText(deployedUrl)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                title="Copy URL"
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={() => setShowLivePreview(true)}
+              className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <Monitor className="w-4 h-4" />
+              Preview Website
+            </button>
+            <a
+              href={deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-[rgba(207,8,140,1)] hover:bg-[rgba(207,8,140,0.8)] rounded-lg transition-colors flex items-center gap-2"
+            >
+              <ArrowUpRight className="w-4 h-4" />
+              Visit Website
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -384,8 +524,8 @@ const WebHostingContent = () => {
                   onDeploy={handleDeploy}
                   isDeploying={isDeploying}
                   deployedUrl={deployedUrl}
-                  canDeploy={!!selectedDomain}
-                  selectedDomain={selectedDomain}
+                  canDeploy={!!customDomain}
+                  selectedDomain={customDomain}
                 />
               )}
             </div>
@@ -397,10 +537,9 @@ const WebHostingContent = () => {
           {/* Container Deployment */}
           {deployMethod === "container" && <ContainerDeployment />}
 
-          {/* Configuration Section */}
           <DeploymentConfig
-            selectedDomain={selectedDomain}
-            setSelectedDomain={setSelectedDomain}
+            selectedDomain={customDomain}
+            setSelectedDomain={setCustomDomain}
           />
 
           {/* Add new components */}
@@ -411,14 +550,13 @@ const WebHostingContent = () => {
         {/* Right Panel - Status and Resources */}
         <div className="space-y-6">
           {/* Hosting Plans */}
-          <HostingPlans
+          {/* <HostingPlans
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
-          />
+          /> */}
 
           {/* Resource Usage */}
-          <ResourceUsage />
-
+          <DeploymentLogs />
           {/* Deployment Status */}
           {deploymentStatus && (
             <DeploymentStatus
@@ -507,7 +645,7 @@ const FileList = ({
   onDeploy,
   isDeploying,
   deployedUrl,
-  canDeploy = true,
+  canDeploy,
   selectedDomain,
 }) => {
   const handleRemoveFile = (fileToRemove) => {
@@ -562,15 +700,14 @@ const FileList = ({
           )}
           <button
             onClick={onDeploy}
-            disabled={
-              isDeploying || !canDeploy || !isValidDomain(selectedDomain)
-            }
+            disabled={isDeploying || !canDeploy}
             className={`px-4 py-1.5 rounded-lg transition-colors flex items-center gap-2
-          ${
-            isDeploying || !canDeploy || !isValidDomain(selectedDomain)
-              ? "bg-white/10 cursor-not-allowed"
-              : "bg-[rgba(207,8,140,1)] hover:bg-[rgba(207,8,140,0.8)]"
-          }`}
+  ${
+    isDeploying || !canDeploy
+      ? "bg-white/10 cursor-not-allowed"
+      : "bg-[rgba(207,8,140,1)] hover:bg-[rgba(207,8,140,0.8)]"
+  }`}
+            title={!canDeploy ? "Please enter a valid subdomain first" : ""}
           >
             {isDeploying ? (
               <>
@@ -580,15 +717,12 @@ const FileList = ({
             ) : (
               <>
                 <ArrowUpRight className="w-4 h-4" />
-                {!canDeploy || !isValidDomain(selectedDomain)
-                  ? "Configure Domain First"
-                  : "Deploy"}
+                Deploy
               </>
             )}
           </button>
         </div>
       </div>
-
       <div className="space-y-2">
         {files.map((file) => (
           <div
@@ -864,9 +998,10 @@ const ContainerDeployment = () => (
     </div>
   </div>
 );
+
 const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
   const [subdomain, setSubdomain] = useState("");
-  const baseDomain = "neoncloud.io";
+  const baseDomain = "neoncloudd.com";
 
   // Handle subdomain input
   const handleSubdomainChange = (e) => {
@@ -876,7 +1011,12 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
       .replace(/^-+|-+$/g, ""); // Remove hyphens from start and end
 
     setSubdomain(value);
-    setSelectedDomain(value ? `${value}.${baseDomain}` : "");
+    // Update the full domain in parent component
+    if (value && isValidSubdomain(value)) {
+      setSelectedDomain(`${value}.${baseDomain}`);
+    } else {
+      setSelectedDomain(null); // Clear domain if invalid
+    }
   };
 
   // Validate subdomain format
@@ -931,7 +1071,6 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
           <label className="block text-sm font-medium mb-2">
             Build Command
           </label>
-          <span>hhhh</span>
           <input
             type="text"
             placeholder="npm run build"
@@ -943,57 +1082,57 @@ const DeploymentConfig = ({ selectedDomain, setSelectedDomain }) => {
   );
 };
 
-const HostingPlans = ({ selectedPlan, setSelectedPlan }) => (
-  <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
-    <h3 className="text-lg font-medium mb-4">Hosting Plans</h3>
-    <div className="space-y-3">
-      {[
-        {
-          name: "Starter",
-          price: "Free",
-          features: ["1GB Storage", "10GB Bandwidth", "2 Deployments"],
-        },
-        {
-          name: "Pro",
-          price: "$10/mo",
-          features: [
-            "10GB Storage",
-            "100GB Bandwidth",
-            "Unlimited Deployments",
-          ],
-        },
-        {
-          name: "Business",
-          price: "$29/mo",
-          features: ["50GB Storage", "500GB Bandwidth", "Priority Support"],
-        },
-      ].map((plan) => (
-        <div
-          key={plan.name}
-          className={`p-4 border rounded-lg cursor-pointer transition-all ${
-            selectedPlan === plan.name
-              ? "border-[rgba(207,8,140,1)] bg-[rgba(207,8,140,0.1)]"
-              : "border-white/10 hover:border-white/20"
-          }`}
-          onClick={() => setSelectedPlan(plan.name)}
-        >
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="font-medium">{plan.name}</h4>
-            <span className="text-[rgba(207,8,140,1)]">{plan.price}</span>
-          </div>
-          <ul className="text-sm text-gray-400">
-            {plan.features.map((feature) => (
-              <li key={feature} className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-400" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  </div>
-);
+// const HostingPlans = ({ selectedPlan, setSelectedPlan }) => (
+//   <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+//     <h3 className="text-lg font-medium mb-4">Hosting Plans</h3>
+//     <div className="space-y-3">
+//       {[
+//         {
+//           name: "Starter",
+//           price: "Free",
+//           features: ["1GB Storage", "10GB Bandwidth", "2 Deployments"],
+//         },
+//         {
+//           name: "Pro",
+//           price: "$10/mo",
+//           features: [
+//             "10GB Storage",
+//             "100GB Bandwidth",
+//             "Unlimited Deployments",
+//           ],
+//         },
+//         {
+//           name: "Business",
+//           price: "$29/mo",
+//           features: ["50GB Storage", "500GB Bandwidth", "Priority Support"],
+//         },
+//       ].map((plan) => (
+//         <div
+//           key={plan.name}
+//           className={`p-4 border rounded-lg cursor-pointer transition-all ${
+//             selectedPlan === plan.name
+//               ? "border-[rgba(207,8,140,1)] bg-[rgba(207,8,140,0.1)]"
+//               : "border-white/10 hover:border-white/20"
+//           }`}
+//           onClick={() => setSelectedPlan(plan.name)}
+//         >
+//           <div className="flex justify-between items-center mb-2">
+//             <h4 className="font-medium">{plan.name}</h4>
+//             <span className="text-[rgba(207,8,140,1)]">{plan.price}</span>
+//           </div>
+//           <ul className="text-sm text-gray-400">
+//             {plan.features.map((feature) => (
+//               <li key={feature} className="flex items-center gap-2">
+//                 <CheckCircle className="w-4 h-4 text-green-400" />
+//                 {feature}
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//       ))}
+//     </div>
+//   </div>
+// );
 
 const ResourceUsage = () => (
   <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-6">

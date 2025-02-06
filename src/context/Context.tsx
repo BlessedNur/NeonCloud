@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 interface Plan {
@@ -9,18 +10,43 @@ interface Plan {
   registrationToken: string;
 }
 
-interface User {
+interface Profile {
   name: string;
+  company: string;
+  role: string;
+  avatar: string;
+  lastActive: Date;
+  accountStatus: string;
+}
+
+interface User {
   email: string;
+  role?: string;
+  plan?: string;
+  profile?: Profile;
+}
+
+interface AuthResponse {
+  success: boolean;
+  message: string;
+  user: User;
+  token: string;
+  email: any;
+  data: {
+    plan: string;
+    emailVerified: boolean;
+  };
 }
 
 interface CloudContextType {
-  choosenPlan: Plan | null; 
+  choosenPlan: Plan | null;
   setChoosenPlan: (plan: Plan) => void;
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
-  login: (userData: User) => void;
+  login: (authData: AuthResponse) => void;
   logout: () => void;
+  isAuthenticated: () => boolean;
+  getToken: () => string | null;
 }
 
 const CloudContext = createContext<CloudContextType | undefined>(undefined);
@@ -31,29 +57,50 @@ export function CloudContextProvider({
   children: React.ReactNode;
 }) {
   const [choosenPlan, setChoosenPlan] = useState<Plan | null>(() => {
-    try {
-      const storedPlan = localStorage.getItem("choosenPlan");
-      return storedPlan ? JSON.parse(storedPlan) : null;
-    } catch {
-      return null;
+    if (typeof window !== "undefined") {
+      try {
+        const storedPlan = localStorage.getItem("choosenPlan");
+        return storedPlan ? JSON.parse(storedPlan) : null;
+      } catch {
+        return null;
+      }
     }
+    return null;
   });
 
+  const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    try {
-      const storedUser = localStorage.getItem("currentUser");
-      return storedUser ? JSON.parse(storedUser) : null;
-    } catch {
-      return null;
+    if (typeof window !== "undefined") {
+      try {
+        const storedUser = localStorage.getItem("currentUser");
+        return storedUser ? JSON.parse(storedUser) : null;
+      } catch {
+        return null;
+      }
     }
+    return null;
   });
-
-  const login = (userData: User) => {
+  const login = (authData: AuthResponse) => {
     try {
+      const userData: User = {
+        email: authData.user?.email || "",
+        role: authData.user?.role || "user",
+        plan: authData.user?.plan,
+      };
+
+      // Make sure token is stored
+      if (!authData.token) {
+        throw new Error("No token received from server");
+      }
+
       setCurrentUser(userData);
       localStorage.setItem("currentUser", JSON.stringify(userData));
+      localStorage.setItem("token", authData.token); // Store token
+
+      console.log("Token stored:", authData.token); // Debug log
     } catch (error) {
-      console.error("Failed to save user to localStorage:", error);
+      console.error("Failed to save auth data:", error);
+      throw error;
     }
   };
 
@@ -61,19 +108,34 @@ export function CloudContextProvider({
     try {
       setCurrentUser(null);
       localStorage.removeItem("currentUser");
+      localStorage.removeItem("token");
       localStorage.removeItem("choosenPlan");
+      router.push("/signin");
     } catch (error) {
       console.error("Failed to clear localStorage:", error);
     }
   };
 
+  const isAuthenticated = () => {
+    if (typeof window !== "undefined") {
+      return !!localStorage.getItem("token");
+    }
+    return false;
+  };
+  const getToken = () => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("token"); // Remove the Bearer prefix here
+    }
+    return null;
+  };
+
   useEffect(() => {
-    try {
-      if (choosenPlan !== null) {
+    if (typeof window !== "undefined" && choosenPlan !== null) {
+      try {
         localStorage.setItem("choosenPlan", JSON.stringify(choosenPlan));
+      } catch (error) {
+        console.error("Failed to save plan to localStorage:", error);
       }
-    } catch (error) {
-      console.error("Failed to save plan to localStorage:", error);
     }
   }, [choosenPlan]);
 
@@ -86,6 +148,8 @@ export function CloudContextProvider({
         setCurrentUser,
         login,
         logout,
+        isAuthenticated,
+        getToken,
       }}
     >
       {children}

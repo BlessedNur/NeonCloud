@@ -22,8 +22,9 @@ import {
   Copy,
   Edit,
 } from "lucide-react";
+import { toast } from "sonner";
 
-const BASE_DOMAIN = "neoncloud.io";
+const BASE_DOMAIN = "neonclouds.com";
 const RESERVED_SUBDOMAINS = [
   "www",
   "api",
@@ -47,6 +48,9 @@ const DomainsContent = () => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [isLoadingDeployments, setIsLoadingDeployments] = useState(false);
+  const [deploymentStatus, setDeploymentStatus] = useState(null);
+  const [deployments, setDeployments] = useState([]);
   const [domains, setDomains] = useState([]);
   const [domainToDelete, setDomainToDelete] = useState(null);
 
@@ -113,6 +117,63 @@ const DomainsContent = () => {
       },
     },
   ];
+  const fetchDeployments = async () => {
+    setIsLoadingDeployments(true);
+    try {
+      const response = await fetch("http://localhost:4000/api/deployments"); // Endpoint to get all deployments
+      const data = await response.json();
+
+      if (data.success) {
+        const formattedDeployments = data.data.map((deployment) => ({
+          id: deployment._id,
+          name: deployment.customDomain,
+          status: mapDeploymentStatus(deployment.status),
+          registrationDate: deployment.createdAt,
+          projectId: deployment.projectId,
+          ssl: {
+            active: true,
+            expiryDate: new Date(
+              Date.now() + 90 * 24 * 60 * 60 * 1000
+            ).toISOString(),
+            provider: "Let's Encrypt",
+            type: "Standard",
+          },
+          dns: {
+            records: [{ type: "CNAME", value: deployment.bucketName }],
+          },
+          traffic: {
+            monthly: 0,
+            bandwidth: "0 GB",
+          },
+          url: deployment.customDomain,
+          bucketName: deployment.bucketName,
+        }));
+
+        setDeployments(formattedDeployments);
+      }
+    } catch (error) {
+      console.error("Error fetching deployments:", error);
+      toast.error("Failed to fetch deployments");
+    } finally {
+      setIsLoadingDeployments(false);
+    }
+  };
+
+  // Use the fetch function in useEffect without requiring a project ID
+  useEffect(() => {
+    fetchDeployments();
+  }, []);
+
+  // Helper function to map deployment status
+  const mapDeploymentStatus = (status) => {
+    const statusMap = {
+      pending: "pending",
+      in_progress: "pending",
+      completed: "active",
+      failed: "error",
+    };
+    return statusMap[status] || "pending";
+  };
 
   useEffect(() => {
     setDomains(sampleDomains);
@@ -126,15 +187,30 @@ const DomainsContent = () => {
     }, 1500);
   };
 
-  const handleDeleteDomain = (domain) => {
+  const handleDeleteDomain = async (domain) => {
     setDomainToDelete(domain);
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
-    setDomains(domains.filter((d) => d.id !== domainToDelete.id));
-    setIsDeleteModalOpen(false);
-    setDomainToDelete(null);
+  const confirmDelete = async () => {
+    try {
+      const response = await fetch(`/api/deployments/${domainToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setDeployments(deployments.filter((d) => d.id !== domainToDelete.id));
+        toast.success("Deployment deleted successfully");
+      } else {
+        throw new Error("Failed to delete deployment");
+      }
+    } catch (error) {
+      console.error("Error deleting deployment:", error);
+      toast.error("Failed to delete deployment");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setDomainToDelete(null);
+    }
   };
 
   const handleCopyDomain = (domain) => {
@@ -214,29 +290,52 @@ const DomainsContent = () => {
       </div>
     );
   };
+  const DomainCard = ({ domain, isSelected, onClick }) => {
+    // Extract subdomain from bucket name instead
+    const subdomain = domain.bucketName?.split(".")[0];
 
-  const StatusBadge = ({ status }) => {
-    const statusConfig = {
-      active: { color: "text-green-400", icon: CheckCircle },
-      pending: { color: "text-yellow-400", icon: Clock },
-      error: { color: "text-red-400", icon: XCircle },
+    const handleCopyDomain = async (domain) => {
+      try {
+        await navigator.clipboard.writeText(`https://${domain.bucketName}`);
+        toast.success("Domain copied to clipboard");
+      } catch (error) {
+        toast.error("Failed to copy domain");
+      }
     };
 
-    const Icon = statusConfig[status]?.icon || AlertCircle;
-    return (
-      <span
-        className={`flex items-center gap-1.5 ${
-          statusConfig[status]?.color || "text-gray-400"
-        }`}
-      >
-        <Icon size={14} />
-        <span className="capitalize">{status}</span>
-      </span>
-    );
-  };
-  const DomainCard = ({ domain, isSelected, onClick }) => {
-    const subdomain = domain.name.replace(`.${BASE_DOMAIN}`, "");
-  
+    const handleDeleteDomain = async (domain) => {
+      if (
+        !window.confirm(`Are you sure you want to delete ${domain.bucketName}?`)
+      ) {
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `http://localhost:4000/api/deployments/${domain._id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        const data = await response.json();
+
+        if (data.success) {
+          toast.success("Domain deleted successfully");
+          // You might want to trigger a refresh of the domain list here
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        console.error("Error deleting domain:", error);
+        toast.error("Failed to delete domain");
+      }
+    };
+
+    // Map deployment status to SSL status
+    const getSSLStatus = (status) => {
+      return status === "completed";
+    };
+
     return (
       <div
         onClick={onClick}
@@ -249,27 +348,25 @@ const DomainsContent = () => {
             <StatusBadge status={domain.status} />
             <h3 className="font-medium">
               <span className="text-[rgba(207,8,140,1)]">{subdomain}</span>
-              <span className="text-gray-400">.{BASE_DOMAIN}</span>
+              <span className="text-gray-400">.neoncloudd.com</span>
             </h3>
           </div>
-          <div className="flex items-center gap-2 transition-opacity">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(`https://${domain.name}`, "_blank");
-              }}
+          <div className="flex items-center gap-2">
+            <a
+              href={`https://${domain.bucketName}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-2 hover:bg-white/10 rounded-lg"
-              title="Visit Site"
+              onClick={(e) => e.stopPropagation()}
             >
               <ExternalLink size={16} />
-            </button>
+            </a>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 handleCopyDomain(domain);
               }}
               className="p-2 hover:bg-white/10 rounded-lg"
-              title="Copy Domain"
             >
               <Copy size={16} />
             </button>
@@ -279,20 +376,73 @@ const DomainsContent = () => {
                 handleDeleteDomain(domain);
               }}
               className="p-2 hover:bg-white/10 rounded-lg text-red-400"
-              title="Delete Domain"
             >
               <Trash2 size={16} />
             </button>
           </div>
         </div>
-        
+
         <div className="mt-3 flex items-center gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2">
-            <Shield size={14} className={domain.ssl.active ? "text-green-400" : "text-red-400"} />
-            <span>{domain.ssl.active ? "SSL Active" : "SSL Inactive"}</span>
+            <Shield
+              size={14}
+              className={
+                getSSLStatus(domain.status) ? "text-green-400" : "text-red-400"
+              }
+            />
+            <span>
+              {getSSLStatus(domain.status) ? "SSL Active" : "SSL Inactive"}
+            </span>
           </div>
-          <div>Created {new Date(domain.registrationDate).toLocaleDateString()}</div>
+          <div>
+            Created{" "}
+            {domain.createdAt
+              ? new Date(domain.createdAt).toLocaleDateString()
+              : "N/A"}
+          </div>
         </div>
+
+        {/* Display the full URL */}
+        <div className="mt-2 text-sm text-gray-500">
+          URL: https://{domain.bucketName}
+        </div>
+      </div>
+    );
+  };
+
+  // Add the StatusBadge component if not already defined
+  const StatusBadge = ({ status }) => {
+    const getStatusColor = (status) => {
+      switch (status) {
+        case "completed":
+          return "bg-green-400/20 text-green-400";
+        case "failed":
+          return "bg-red-400/20 text-red-400";
+        case "in_progress":
+          return "bg-yellow-400/20 text-yellow-400";
+        default:
+          return "bg-gray-400/20 text-gray-400";
+      }
+    };
+
+    const getStatusText = (status) => {
+      switch (status) {
+        case "completed":
+          return "Active";
+        case "failed":
+          return "Failed";
+        case "in_progress":
+          return "Pending";
+        default:
+          return "Unknown";
+      }
+    };
+
+    return (
+      <div
+        className={`px-2 py-1 rounded-full text-xs ${getStatusColor(status)}`}
+      >
+        {getStatusText(status)}
       </div>
     );
   };
@@ -314,7 +464,10 @@ const DomainsContent = () => {
         case "status":
           return a.status.localeCompare(b.status);
         case "date":
-          return new Date(b.registrationDate).getTime() - new Date(a.registrationDate).getTime();
+          return (
+            new Date(b.registrationDate).getTime() -
+            new Date(a.registrationDate).getTime()
+          );
         default:
           return 0;
       }
@@ -331,13 +484,6 @@ const DomainsContent = () => {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            // onClick={() => setIsCreateModalOpen(true)}
-            className="px-4 py-2 bg-[rgba(207,8,140,1)] hover:bg-[rgba(207,8,140,0.8)] rounded-lg transition-colors flex items-center gap-2"
-          >
-            <Plus size={16} />
-            <span>New Project</span>
-          </button>
           <button
             onClick={handleRefresh}
             className={`p-2 bg-black/30 border border-white/10 rounded-lg hover:bg-white/5 transition-colors ${
@@ -436,29 +582,37 @@ const DomainsContent = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Domains List */}
         <div className="lg:col-span-2 space-y-4">
-          {filteredAndSortedDomains.map((domain) => (
-            <DomainCard
-              key={domain.id}
-              domain={domain}
-              isSelected={selectedDomain?.id === domain.id}
-              onClick={() => setSelectedDomain(domain)}
-            />
-          ))}
-          {filteredAndSortedDomains.length === 0 && (
-            <div className="text-center py-12 bg-black/30 border border-white/10 rounded-lg">
-              <div className="flex justify-center mb-4">
-                <Globe className="w-12 h-12 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium mb-2">No domains found</h3>
-              <p className="text-gray-400">
-                {searchTerm
-                  ? `No domains match your search "${searchTerm}"`
-                  : "Get started by creating your first subdomain"}
-              </p>
+          {isLoadingDeployments ? (
+            <div className="text-center py-12">
+              <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4" />
+              <p>Loading deployments...</p>
             </div>
+          ) : (
+            <>
+              {deployments.map((deployment) => (
+                <DomainCard
+                  key={deployment.id}
+                  domain={deployment}
+                  isSelected={selectedDomain?.id === deployment.id}
+                  onClick={() => setSelectedDomain(deployment)}
+                />
+              ))}
+              {deployments.length === 0 && (
+                <div className="text-center py-12 bg-black/30 border border-white/10 rounded-lg">
+                  <div className="flex justify-center mb-4">
+                    <Globe className="w-12 h-12 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">
+                    No deployments found
+                  </h3>
+                  <p className="text-gray-400">
+                    Get started by deploying your first website
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
-
         {/* Details Panel */}
         <div className="lg:col-span-1">
           {selectedDomain ? (

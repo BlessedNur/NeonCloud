@@ -19,6 +19,8 @@ import {
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import ParticlesComponent from "../../components/Particles/ParticlesBackground";
+import { useCloudContext } from "../../context/Context";
+import { useRouter } from "next/navigation";
 const ContactCard = ({ icon: Icon, title, description, isActive, onClick }) => (
   <div
     onClick={onClick}
@@ -69,6 +71,7 @@ const StatusIndicator = ({ status }) => {
 };
 
 function Page() {
+  const { isAuthenticated } = useCloudContext();
   const [selectedCategory, setSelectedCategory] = useState("general");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const contactCategories = [
@@ -117,7 +120,8 @@ function Page() {
       link: "/docs/api",
     },
   ];
-  if (!isLoggedIn) {
+  const router = useRouter();
+  if (!isAuthenticated()) {
     return (
       <div className="min-h-screen bg-black text-white">
         <Navbar />
@@ -206,7 +210,7 @@ function Page() {
                     </li>
                   </ul>
                   <button
-                    // onClick={() => setIsLoggedIn(true)}
+                    onClick={() => router.push("/signin")}
                     className="w-full px-6 py-3 bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 rounded-lg text-white font-semibold flex items-center justify-center"
                   >
                     <LogIn className="mr-2" size={20} />

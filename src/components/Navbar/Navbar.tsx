@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Mail,
   Phone,
@@ -23,10 +23,13 @@ import {
   Cloud,
   DollarSign,
   Database,
+  User,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useCloudContext } from "../../context/Context";
+import { useApi } from "../../services/api.profile"; // Add this import
 
 const Logo = ({ onclick }) => (
   <div className="flex cursor-pointer items-center" onClick={onclick}>
@@ -103,8 +106,31 @@ function Navbar() {
   const [mobileDropdown, setMobileDropdown] = useState(null);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [language, setLanguage] = useState("EN");
+
+  const [userProfile, setUserProfile] = useState<any>(null);
   const path = usePathname();
   const router = useRouter();
+
+  const { currentUser, logout, isAuthenticated } = useCloudContext();
+  const { profileApi } = useApi();
+
+  // Fetch user profile when component mounts
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (isAuthenticated()) {
+        try {
+          const response = await profileApi.getProfile();
+          if (response.error === false && response.profile) {
+            setUserProfile(response.profile);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [isAuthenticated]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -142,16 +168,22 @@ function Navbar() {
   const languages = ["EN", "FR"];
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    logout();
+    setIsOpen(false);
   };
-
   const UserAvatar = () => (
-    <div className="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center cursor-pointer">
-      <img
-        src="https://i.pravatar.cc/100"
-        alt="User"
-        className="w-8 h-8 rounded-full object-cover"
-      />
+    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[rgba(207,8,140,1)] to-purple-600 p-[2px] cursor-pointer">
+      <div className="w-full h-full rounded-full overflow-hidden bg-black/40 backdrop-blur-sm">
+        {userProfile?.avatar ? (
+          <img
+            src={userProfile.avatar}
+            alt={userProfile.name || "User"}
+            className="w-full h-full object-cover hover:scale-105 transition-transform"
+          />
+        ) : (
+          <User className="w-full h-full p-2 text-gray-400" />
+        )}
+      </div>
     </div>
   );
 
@@ -273,28 +305,28 @@ function Navbar() {
               ))}
             </div>
           </div>
-          {isLoggedIn ? (
+          {isAuthenticated() ? (
             <div className="relative group">
               <button className="flex items-center gap-2 hover:text-[rgba(207,8,140,1)] transition-colors py-2">
                 <UserAvatar />
                 <ChevronDown size={16} />
               </button>
               <div
-                className="absolute top-full right-0 mt-2 w-56 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg shadow-xl py-2 hidden group-hover:block
+                className="absolute top-[3em] right-0 mt-2 w-56 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg shadow-xl py-2 hidden group-hover:block
                 before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-b before:from-[rgba(207,8,140,0.1)] before:to-transparent before:opacity-40 before:rounded-lg before:-z-10"
               >
-                <a
-                  href="#"
+                <Link
+                  href="/dashboard"
                   className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-[rgba(207,8,140,0.2)] hover:text-[rgba(207,8,140,1)] transition-colors group"
                 >
                   <UserCircle
                     size={16}
                     className="text-[rgba(207,8,140,1)] opacity-70 group-hover:opacity-100 transition-opacity"
                   />
-                  <span className="font-medium">Profile</span>
-                </a>
-                <a
-                  href="#"
+                  <span className="font-medium">Dashboard</span>
+                </Link>
+                <Link
+                  href="/dashboard/settings"
                   className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-[rgba(207,8,140,0.2)] hover:text-[rgba(207,8,140,1)] transition-colors group"
                 >
                   <Settings
@@ -302,7 +334,7 @@ function Navbar() {
                     className="text-[rgba(207,8,140,1)] opacity-70 group-hover:opacity-100 transition-opacity"
                   />
                   <span className="font-medium">Settings</span>
-                </a>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-[rgba(207,8,140,0.2)] hover:text-[rgba(207,8,140,1)] transition-colors group"
@@ -320,7 +352,7 @@ function Navbar() {
               onClick={() => router.push("/signin")}
               className="relative cursor-pointer group inline-block"
             >
-              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r  from-[rgba(207,8,140,1)] to-purple-500 transition-all duration-300">
+              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 transition-all duration-300">
                 Login
               </span>
               <span className="absolute bottom-[-2px] left-0 w-full h-[2px] bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 opacity-80" />
@@ -350,10 +382,12 @@ function Navbar() {
       >
         <div className="h-full flex flex-col">
           <div className="p-4 border-b border-white/10 flex items-center justify-between">
-            {isLoggedIn ? (
+            {isAuthenticated() ? (
               <div className="flex items-center gap-2">
                 <UserAvatar />
-                <span>User</span>
+                <span>
+                  {userProfile?.name || currentUser?.email?.split("@")[0]}
+                </span>
               </div>
             ) : (
               <UserCircle size={32} className="text-[rgba(207,8,140,1)]" />
@@ -436,7 +470,7 @@ function Navbar() {
           </nav>
 
           <div className="p-4 border-t border-white/10">
-            {isLoggedIn ? (
+            {isAuthenticated() ? (
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[rgba(207,8,140,1)] to-purple-500 px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"

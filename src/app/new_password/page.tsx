@@ -9,8 +9,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
-import ParticlesComponent from "../../../components/Particles/ParticlesBackground";
-import { useRouter } from "next/navigation";
+import ParticlesComponent from "../../components/Particles/ParticlesBackground";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const PasswordStrengthIndicator = ({ password }) => {
   const [strength, setStrength] = useState({
@@ -202,6 +202,8 @@ const Logo = ({ onclick }) => (
 
 function Page() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   const [formData, setFormData] = useState({
     password: "",
@@ -215,6 +217,12 @@ function Page() {
   const [warning, setWarning] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/forgot-password");
+    }
+  }, [token, router]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -280,23 +288,47 @@ function Page() {
     setIsLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token,
+            newPassword: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.message);
+      }
+
       setIsSuccess(true);
 
+      // Show success message for 2 seconds before redirecting
       setTimeout(() => {
-        window.location.href = "/signin";
+        router.push("/signin");
       }, 2000);
     } catch (err) {
-      setError("Failed to update password. Please try again.");
+      setError(err.message || "Failed to update password. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  if (!token) {
+    return null; // Or a loading state if you prefer
+  }
+
   return (
     <>
       <Logo onclick={() => router.push("/")} />
-      <div className="min-h-screen relative z-10 bg-black text-white flex items-center justify-center p-6">
+      <div className="min-h-screen relative z-10  text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
           <Link
             href="/signin"

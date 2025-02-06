@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Search,
   Shield,
@@ -93,31 +93,53 @@ const Page = () => {
   const [searchResults, setSearchResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [currentUser, setCurrentUser] = useState(true);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
+  // Separate search logic function
+  const performSearch = (query: string) => {
     setIsSearching(true);
-
     setTimeout(() => {
       setSearchResults([
         {
-          domain: `${searchQuery}.neoncloud.io`,
+          domain: `${query}.neoncloud.com`,
           available: true,
           price: "Free",
         },
         {
-          domain: `${searchQuery}-app.neoncloud.io`,
+          domain: `${query}-app.neoncloud.com`,
           available: true,
           price: "Free",
         },
         {
-          domain: `${searchQuery}-api.neoncloud.io`,
+          domain: `${query}-api.neoncloud.com`,
           available: true,
           price: "Free",
         },
       ]);
       setIsSearching(false);
     }, 1000);
+  };
+
+  // Handle form submission
+  const handleSearch = (e: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (searchQuery) {
+      performSearch(searchQuery);
+    }
+  };
+
+  // Handle URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const searchParam = params.get("search");
+    if (searchParam) {
+      setSearchQuery(searchParam);
+      performSearch(searchParam);
+    }
+  }, []);
+
+  // Handle popular subdomain clicks
+  const handlePopularSubdomain = (subdomain: string) => {
+    setSearchQuery(subdomain);
+    performSearch(subdomain);
   };
 
   const features = [
@@ -203,7 +225,7 @@ const Page = () => {
                       />
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hidden sm:block">
-                        .neoncloud.io
+                        .neoncloud.com
                       </span>
                     </div>
                     <button
@@ -220,7 +242,7 @@ const Page = () => {
                   {popularSubdomains.map((subdomain, index) => (
                     <button
                       key={index}
-                      onClick={() => setSearchQuery(subdomain)}
+                      onClick={() => handlePopularSubdomain(subdomain)}
                       className="text-gray-300 hover:text-[rgba(207,8,140,1)] transition-colors"
                     >
                       {subdomain}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import {
   Zap,
@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   ArrowUpRight,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const StatItem = ({ value, label, icon: Icon }) => (
   <div className="flex-1 group bg-gradient-to-br from-gray-900 to-gray-800 backdrop-blur-sm px-4 py-4 rounded-2xl border border-gray-700/50 hover:border-purple-500/30 transition-all duration-300 shadow-lg hover:shadow-purple-500/10">
@@ -32,6 +33,7 @@ const MigrationSection = () => {
     "SSL Certificate Setup",
     "Database Optimization",
   ];
+  const router = useRouter();
 
   return (
     <div className="py-24 relative z-10">
@@ -91,7 +93,10 @@ const MigrationSection = () => {
             <div className="flex flex-wrap gap-4 mt-4">
               <button className="group relative px-8 py-3 rounded-lg overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-300 group-hover:scale-105" />
-                <div className="relative flex items-center gap-2">
+                <div
+                  onClick={() => router.push("/contact")}
+                  className="relative flex items-center gap-2"
+                >
                   <span className="font-semibold text-white">
                     Contact Sales
                   </span>
@@ -99,7 +104,10 @@ const MigrationSection = () => {
                 </div>
               </button>
 
-              <button className="px-8 py-3 rounded-lg border border-gray-700 text-white font-semibold hover:bg-gray-800/50 transition-all duration-300">
+              <button
+                onClick={() => router.push("/about")}
+                className="px-8 py-3 rounded-lg border border-gray-700 text-white font-semibold hover:bg-gray-800/50 transition-all duration-300"
+              >
                 Learn More
               </button>
             </div>

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const plans = [
   {
-    title: "Basic - Free",
+    title: "Free",
     monthlyPrice: "$0",
     yearlyPrice: "$0",
     discount: "0%",

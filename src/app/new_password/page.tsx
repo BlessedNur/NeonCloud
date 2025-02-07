@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,Suspense} from "react";
 import {
   Eye,
   EyeOff,
@@ -326,7 +326,7 @@ function Page() {
   }
 
   return (
-    <>
+    <Suspense>
       <Logo onclick={() => router.push("/")} />
       <div className="min-h-screen relative z-10  text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
@@ -454,7 +454,7 @@ function Page() {
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
       </div>
       <ParticlesComponent />
-    </>
+    </Suspense>
   );
 }
 

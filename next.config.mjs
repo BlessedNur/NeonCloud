@@ -1,8 +1,7 @@
-import webpack from "webpack";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
+    const webpack = require("webpack");
     config.plugins.push(
       new webpack.ProvidePlugin({
         $: "jquery",
@@ -10,6 +9,14 @@ const nextConfig = {
         "window.jQuery": "jquery",
       })
     );
+    // Prevent 'window is not defined' errors
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      child_process: false,
+    };
     return config;
   },
   images: {
@@ -20,15 +27,35 @@ const nextConfig = {
       },
     ],
   },
-  // Add these configurations to ignore TypeScript and ESLint errors during build
+  // Typescript and ESLint configurations
   typescript: {
-    // This will ignore all TypeScript errors during build
     ignoreBuildErrors: true,
   },
   eslint: {
-    // This will ignore all ESLint errors during build
     ignoreDuringBuilds: true,
+  },
+  // Add these to handle SSR/CSR properly
+  output: "standalone",
+  experimental: {
+    workerThreads: false,
+    cpus: 1,
+  },
+  // Prevent prerendering issues
+  reactStrictMode: true,
+  swcMinify: true,
+  compiler: {
+    // Remove console.logs in production
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  // Handle browser APIs properly
+  serverRuntimeConfig: {
+    // Will only be available on the server side
+    mySecret: "secret",
+  },
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    staticFolder: "/static",
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

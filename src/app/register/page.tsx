@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, use, Suspense } from "react";
 import {
   Eye,
   EyeOff,
@@ -179,7 +179,7 @@ type Erros = {
   terms?: string;
 };
 
-function Page() {
+const Content = () => {
   const searchParams = useSearchParams();
   const { choosenPlan } = useCloudContext();
   const [isValidToken, setIsValidToken] = useState(false);
@@ -458,6 +458,13 @@ function Page() {
       <ParticlesComponent />
     </PublicRoute>
   );
-}
+};
 
+function Page() {
+  return (
+    <Suspense>
+      <Content />
+    </Suspense>
+  );
+}
 export default Page;

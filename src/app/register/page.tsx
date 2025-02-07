@@ -285,7 +285,7 @@ const Content = () => {
         toast.error(data.message);
       }
 
-      // router.push("/signin");
+      router.push("/signin");
     } catch (error) {
       toast.error("Registration failed:", error);
     } finally {

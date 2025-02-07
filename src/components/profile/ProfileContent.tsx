@@ -288,62 +288,59 @@ const ProfileContent: React.FC = () => {
     };
 
     fetchProfile();
-  }, []);
-  const handleProfileSave = async () => {
-    console.log("Saving profile...");
-    try {
-      setState((prev) => ({ ...prev, isLoading: true }));
+  }, []);const handleProfileSave = async () => {
+  console.log("Saving profile...");
+  try {
+    setState((prev) => ({ ...prev, isLoading: true }));
 
-      // Filter only allowed fields
-      const allowedFields = [
-        "name",
-        "phone",
-        "location",
-        "bio",
-        "skills",
-        "languages",
-        "socialLinks",
-      ];
+    // Filter only allowed fields
+    const allowedFields = [
+      "name",
+      "phone",
+      "location",
+      "bio",
+      "skills",
+      "languages",
+      "socialLinks",
+    ];
 
-      const updateData = Object.fromEntries(
-        Object.entries(state)
-          .filter(([key]) => allowedFields.includes(key))
-          .map(([key, value]) => [key, value])
-      );
+    const updateData = Object.fromEntries(
+      Object.entries(state)
+        .filter(([key]) => allowedFields.includes(key))
+        .map(([key, value]) => [key, value])
+    );
 
-      console.log("Filtered update data:", updateData);
+    console.log("Filtered update data:", updateData);
 
-      const response = await profileApi.updateProfile(updateData);
+    const response = await profileApi.updateProfile(updateData);
 
-      if (response.error === false && response.profile) {
-        setState((prev) => {
-          const newState = {
-            ...prev,
-            ...response.profile,
-            isEditing: false,
-            isLoading: false,
-            error: null,
-          };
-          console.log("State after successful save:", newState);
-          return newState;
-        });
-        toast.success("Profile updated successfully");
-      } else {
-        throw new Error(response.message || "Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Profile save error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to update profile"
-      );
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error:
-          error instanceof Error ? error.message : "Failed to update profile",
-      }));
+    if (response.error === false && response.profile) {
+      setState((prev) => {
+        const newState = {
+          ...prev,
+          ...response.profile,
+          isEditing: false,
+          isLoading: false,
+          error: null,
+        };
+        console.log("State after successful save:", newState);
+        return newState;
+      });
+      toast.success("Profile updated successfully");
+    } else {
+      throw new Error(response.message || "Failed to update profile");
     }
-  };
+  } catch (error) {
+    console.error("Profile save error:", error);
+    toast.error(error instanceof Error ? error.message : "Failed to update profile");
+    setState((prev) => ({
+      ...prev,
+      isLoading: false,
+      error: error instanceof Error ? error.message : "Failed to update profile",
+    }));
+  }
+};
+
 
   console.log("Rendering ProfileContent. Current state:", {
     isLoading: state.isLoading,

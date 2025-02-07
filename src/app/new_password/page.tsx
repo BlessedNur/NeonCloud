@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect ,Suspense} from "react";
+
+import React, { useState, useEffect, Suspense } from "react";
 import {
   Eye,
   EyeOff,
@@ -200,7 +201,7 @@ const Logo = ({ onclick }) => (
   </div>
 );
 
-function Page() {
+const Content = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -289,7 +290,7 @@ function Page() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
+        `http://localhost:4000/auth/reset-password`,
         {
           method: "POST",
           headers: {
@@ -326,7 +327,7 @@ function Page() {
   }
 
   return (
-    <Suspense>
+    <>
       <Logo onclick={() => router.push("/")} />
       <div className="min-h-screen relative z-10  text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
@@ -454,6 +455,14 @@ function Page() {
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
       </div>
       <ParticlesComponent />
+    </>
+  );
+};
+
+function Page() {
+  return (
+    <Suspense>
+      <Content />
     </Suspense>
   );
 }

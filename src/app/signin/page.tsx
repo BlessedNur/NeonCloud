@@ -261,7 +261,7 @@ function Page() {
       });
 
       toast.success("Login successful!");
-      router.push("/dashboard");
+      router.push("/");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Login failed");
     } finally {

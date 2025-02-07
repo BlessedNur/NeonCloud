@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import { CheckCircle, XCircle, Loader, Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";

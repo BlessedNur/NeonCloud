@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { CheckCircle, XCircle, Loader, Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -98,6 +97,7 @@ const StateDisplay = ({ state, email, error, onResend }) => {
 
   return displays[state] || null;
 };
+
 const Logo = ({ onclick }) => (
   <div
     className="fixed top-7 left-7 flex cursor-pointer items-center z-10"
@@ -178,26 +178,32 @@ function Page() {
   );
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [token, setToken] = useState(null);
 
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token");
   useEffect(() => {
-    const email = params.get("email");
-    setEmail(email);
+    // Move URL parameter extraction here
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlToken = params.get("token");
+      const urlEmail = params.get("email");
 
-    if (!token) {
-      setVerificationState(VerificationState.ERROR);
-      setError("No verification token found.");
-      return;
+      setToken(urlToken);
+      setEmail(urlEmail);
+
+      if (!urlToken) {
+        setVerificationState(VerificationState.ERROR);
+        setError("No verification token found.");
+        return;
+      }
+
+      verifyEmail(urlToken);
     }
-
-    verifyEmail(token);
   }, []);
 
-  const verifyEmail = async (token) => {
+  const verifyEmail = async (verificationToken) => {
     try {
       const response = await fetch(
-        `${NEXT_PUBLIC_API_URL}/auth/verify_email?token=${token}`,
+        `${NEXT_PUBLIC_API_URL}/auth/verify_email?token=${verificationToken}`,
         {
           method: "GET",
           headers: {
@@ -258,7 +264,7 @@ function Page() {
   return (
     <>
       <Logo onclick={() => router.push("/")} />
-      <div className="min-h-screen relative z-10  text-white flex items-center justify-center p-6">
+      <div className="min-h-screen relative z-10 text-white flex items-center justify-center p-6">
         <div className="w-full relative z-10 max-w-md">
           {(verificationState === VerificationState.ERROR ||
             verificationState === VerificationState.RESEND_SUCCESS) && (

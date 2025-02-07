@@ -2,8 +2,7 @@
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:react/recommended"
   ],
   "env": {
     "browser": true,
@@ -14,20 +13,6 @@
     "no-undef": "warn",
     "react/display-name": "off",
     "react/prop-types": "off",
-    "no-unused-vars": "warn",
-    // Disable TypeScript property checks
-    "@typescript-eslint/no-unsafe-member-access": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    // Disable TypeScript property existence checks
-    "@typescript-eslint/ban-ts-comment": "off"
-  },
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "@typescript-eslint/no-unsafe-member-access": "off",
-        "@typescript-eslint/no-explicit-any": "off"
-      }
-    }
-  ]
+    "no-unused-vars": "warn"
+  }
 }

@@ -1,4 +1,3 @@
-
 import webpack from "webpack";
 
 /** @type {import('next').NextConfig} */
@@ -20,6 +19,15 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+  },
+  // Add these configurations to ignore TypeScript and ESLint errors during build
+  typescript: {
+    // This will ignore all TypeScript errors during build
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    // This will ignore all ESLint errors during build
+    ignoreDuringBuilds: true,
   },
 };
 

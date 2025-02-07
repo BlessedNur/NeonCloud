@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL = "https://neoncloud-backend.onrender.com/api";
 
 interface DeployProjectParams {
   projectId: string;

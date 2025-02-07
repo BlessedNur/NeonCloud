@@ -156,7 +156,7 @@ function Page() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:4000/auth/forgot-password",
+        "https://neoncloud-backend.onrender.com/auth/forgot-password",
         {
           method: "POST",
           headers: {

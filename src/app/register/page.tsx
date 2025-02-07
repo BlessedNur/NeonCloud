@@ -261,17 +261,20 @@ const Content = () => {
     setIsLoading(true);
     console.log(formData, choosenPlan.title);
     try {
-      const res = await fetch("http://localhost:4000/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          plan: choosenPlan.title,
-        }),
-      });
+      const res = await fetch(
+        "https://neoncloud-backend.onrender.com/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+            plan: choosenPlan.title,
+          }),
+        }
+      );
       const data = await res.json();
       if (res.ok) {
         toast.success(data.message);

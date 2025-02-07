@@ -26,7 +26,9 @@ const useDeploymentData = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/api/deployments");
+      const response = await fetch(
+        "https://neoncloud-backend.onrender.com/api/deployments"
+      );
       const result = await response.json();
 
       if (result.success) {
@@ -246,7 +248,9 @@ const RecentActivities = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/deployments");
+        const response = await fetch(
+          "https://neoncloud-backend.onrender.com/api/deployments"
+        );
         const data = await response.json();
 
         if (data.success) {
@@ -339,7 +343,9 @@ const DomainStatus = () => {
   useEffect(() => {
     const fetchDomains = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/deployments");
+        const response = await fetch(
+          "https://neoncloud-backend.onrender.com/api/deployments"
+        );
         const data = await response.json();
 
         if (data.success) {

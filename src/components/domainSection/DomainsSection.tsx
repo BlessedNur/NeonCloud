@@ -120,7 +120,9 @@ const DomainsContent = () => {
   const fetchDeployments = async () => {
     setIsLoadingDeployments(true);
     try {
-      const response = await fetch("http://localhost:4000/api/deployments"); // Endpoint to get all deployments
+      const response = await fetch(
+        "https://neoncloud-backend.onrender.com/api/deployments"
+      ); // Endpoint to get all deployments
       const data = await response.json();
 
       if (data.success) {
@@ -312,7 +314,7 @@ const DomainsContent = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:4000/api/deployments/${domain._id}`,
+          `https://neoncloud-backend.onrender.com/api/deployments/${domain._id}`,
           {
             method: "DELETE",
           }

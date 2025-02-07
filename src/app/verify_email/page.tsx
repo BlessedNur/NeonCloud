@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { CheckCircle, XCircle, Loader, Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -172,7 +172,7 @@ const Logo = ({ onclick }) => (
 );
 
 function Page() {
-  const NEXT_PUBLIC_API_URL = "http://localhost:4000";
+  const NEXT_PUBLIC_API_URL = "https://neoncloud-backend.onrender.com";
   const router = useRouter();
   const [verificationState, setVerificationState] = useState(
     VerificationState.VERIFYING

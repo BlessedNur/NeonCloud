@@ -290,7 +290,7 @@ const Content = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/auth/reset-password`,
+        `https://neoncloud-backend.onrender.com/auth/reset-password`,
         {
           method: "POST",
           headers: {

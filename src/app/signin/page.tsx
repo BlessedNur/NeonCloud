@@ -226,16 +226,19 @@ function Page() {
 
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const res = await fetch(
+        "https://neoncloud-backend.onrender.com/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const data = await res.json();
 

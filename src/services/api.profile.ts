@@ -43,7 +43,7 @@ interface ApiResponse<T> {
   profile?: T; // Changed from data to profile to match backend
 }
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = "https://neoncloud-backend.onrender.com/api";
 
 export const useApi = () => {
   const { getToken, logout } = useCloudContext();
